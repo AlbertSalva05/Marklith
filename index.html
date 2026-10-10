@@ -39,7 +39,9 @@ button{white-space:nowrap}
 @keyframes mlSpin{to{transform:rotate(360deg)}}
 @keyframes mlSweep{0%{top:0}100%{top:calc(100% - 2px)}}
 @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important}}
+body{zoom:var(--ml-zoom,1)}
 </style>
+<script>try{var mlz={lg:1.125,xl:1.25}[localStorage.getItem('marklith-text')];if(mlz)document.documentElement.style.setProperty('--ml-zoom',mlz)}catch(e){}</script>
 </helmet>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <symbol id="ml-mark" viewBox="0 0 256 256"><g fill="currentColor"><rect x="40" y="56" width="40" height="144"></rect><rect x="108" y="96" width="40" height="104"></rect><rect x="40" y="56" width="176" height="40"></rect><rect x="176" y="96" width="40" height="28"></rect><rect x="176" y="136" width="40" height="26"></rect><rect x="176" y="174" width="40" height="26"></rect></g></symbol>
@@ -101,8 +103,8 @@ button{white-space:nowrap}
                 <div role="group" aria-roledescription="slide" aria-label="{{ sl.aria }}" aria-hidden="{{ sl.hidden }}" style="{{ sl.style }}">
                   <div style="{{ sl.textStyle }}">
                     <p style="margin:0;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:var(--action-primary)"><i class="ph {{ sl.icon }}" aria-hidden="true" style="font-size:18px"></i>{{ sl.kicker }}</p>
-                    <h2 style="margin:0;font-size:clamp(32px,5.4vw,68px);line-height:1.05;font-weight:600;letter-spacing:-0.025em;text-wrap:balance;max-width:13ch;overflow-wrap:break-word">{{ sl.title }}</h2>
-                    <p style="margin:0;font-size:clamp(17px,1.5vw,20px);line-height:1.5;color:var(--text-secondary);max-width:44ch;text-wrap:pretty">{{ sl.body }}</p>
+                    <h2 style="margin:0;font-size:clamp(32px,5.4vw,68px);line-height:1.05;font-weight:600;letter-spacing:-0.025em;text-wrap:balance;max-width:16ch;overflow-wrap:break-word;min-height:2.1em">{{ sl.title }}</h2>
+                    <p style="margin:0;font-size:clamp(17px,1.5vw,20px);line-height:1.5;color:var(--text-secondary);max-width:42ch;text-wrap:pretty;min-height:3em">{{ sl.body }}</p>
                     <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px">
                       <a href="#/workspace" onClick="{{ goWorkspace }}" style="flex:0 1 auto;justify-content:center;height:52px;padding:0 22px;display:inline-flex;align-items:center;gap:10px;background:var(--action-primary);color:var(--text-on-action);border-radius:2px;text-decoration:none;font-size:16px;font-weight:500;transition:background-color 120ms, transform 120ms" style-hover="background:var(--action-primary-hover);transform:translateY(-1px)">Open workspace<i class="ph ph-arrow-right" aria-hidden="true" style="font-size:18px"></i></a>
                       <a href="{{ sl.secHref }}" onClick="{{ sl.secGo }}" style="flex:0 1 auto;justify-content:center;height:52px;padding:0 20px;display:inline-flex;align-items:center;gap:10px;background:var(--surface-panel);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:2px;text-decoration:none;font-size:16px;font-weight:500;transition:background-color 120ms" style-hover="background:var(--surface-hover)">{{ sl.secLabel }}</a>
@@ -535,29 +537,32 @@ button{white-space:nowrap}
       </sc-if>
 
       <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
-        <div style="display:flex;flex-direction:column;gap:32px;max-width:720px">
-          <section aria-labelledby="set-appear" style="display:flex;flex-direction:column;gap:12px">
-            <h2 id="set-appear" style="margin:0;font-size:20px;line-height:28px;font-weight:600">Appearance</h2>
-            <span id="theme-l" style="font-size:14px;font-weight:500">Theme</span>
-            <div role="radiogroup" aria-labelledby="theme-l" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:420px;border:1px solid var(--border-control);border-radius:2px;overflow:hidden">
-              <sc-for list="{{ themeOpts }}" as="t" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{ t.checked }}" onClick="{{ t.pick }}" style="{{ t.style }}">{{ t.label }}</button></sc-for>
+        <div style="display:flex;flex-direction:column;max-width:1200px">
+          <p style="margin:0 0 24px;font-size:18px;line-height:28px;color:var(--text-secondary);max-width:60ch;text-wrap:pretty">Change how marklith looks and manage what it keeps in this browser. Changes apply straight away.</p>
+          <section aria-labelledby="set-display" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px 48px;padding:32px 0;border-top:1px solid var(--border-divider)">
+            <div style="display:flex;flex-direction:column;gap:4px"><h2 id="set-display" style="margin:0;font-size:20px;line-height:28px;font-weight:600">Display</h2><p style="margin:0;font-size:15px;line-height:24px;color:var(--text-secondary);max-width:60ch;text-wrap:pretty">Theme, contrast and text size. Every page and component supports each option.</p></div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:24px">
+              <fieldset style="border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;min-width:0"><legend style="padding:0;margin:0 0 8px;font-size:15px;font-weight:600">Theme</legend><sc-for list="{{ themeCards }}" as="o" hint-placeholder-count="3"><label for="{{ o.inputId }}" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 16px;border-radius:4px;border-style:solid;border-width:{{ o.bw }};border-color:{{ o.border }};background:var(--surface-panel);cursor:pointer;font-size:16px;font-weight:500" style-hover="background:var(--surface-hover)"><input type="radio" name="theme" id="{{ o.inputId }}" checked="{{ o.on }}" onChange="{{ o.pick }}" style="width:20px;height:20px;margin:0;accent-color:var(--action-primary)"><span style="flex:1">{{ o.label }}</span><sc-if value="{{ o.on }}"><i class="ph ph-check" aria-hidden="true" style="font-size:20px;color:var(--action-primary)"></i></sc-if></label></sc-for><p role="status" style="margin:4px 0 0;font-size:14px;line-height:20px;color:var(--text-secondary)">{{ themeNow }}</p></fieldset>
+              <fieldset style="border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;min-width:0"><legend style="padding:0;margin:0 0 8px;font-size:15px;font-weight:600">Contrast</legend><sc-for list="{{ contrastCards }}" as="o" hint-placeholder-count="3"><label for="{{ o.inputId }}" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 16px;border-radius:4px;border-style:solid;border-width:{{ o.bw }};border-color:{{ o.border }};background:var(--surface-panel);cursor:pointer;font-size:16px;font-weight:500" style-hover="background:var(--surface-hover)"><input type="radio" name="contrast" id="{{ o.inputId }}" checked="{{ o.on }}" onChange="{{ o.pick }}" style="width:20px;height:20px;margin:0;accent-color:var(--action-primary)"><span style="flex:1">{{ o.label }}</span><sc-if value="{{ o.on }}"><i class="ph ph-check" aria-hidden="true" style="font-size:20px;color:var(--action-primary)"></i></sc-if></label></sc-for></fieldset>
+              <fieldset style="border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;min-width:0"><legend style="padding:0;margin:0 0 8px;font-size:15px;font-weight:600">Text size</legend><sc-for list="{{ textCards }}" as="o" hint-placeholder-count="3"><label for="{{ o.inputId }}" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 16px;border-radius:4px;border-style:solid;border-width:{{ o.bw }};border-color:{{ o.border }};background:var(--surface-panel);cursor:pointer;font-size:16px;font-weight:500" style-hover="background:var(--surface-hover)"><input type="radio" name="text-size" id="{{ o.inputId }}" checked="{{ o.on }}" onChange="{{ o.pick }}" style="width:20px;height:20px;margin:0;accent-color:var(--action-primary)"><span style="flex:1">{{ o.label }}</span><span aria-hidden="true" style="font-weight:600;font-size:{{ o.fs }};line-height:1">Aa</span></label></sc-for></fieldset>
             </div>
-            <p role="status" style="margin:0;font-size:14px;color:var(--text-secondary)">{{ themeNow }}</p>
-            <label style="display:flex;align-items:center;gap:10px;min-height:44px;font-size:14px;font-weight:500;cursor:pointer;align-self:flex-start"><input type="checkbox" checked="{{ contrastMore }}" onChange="{{ toggleContrast }}" style="width:20px;height:20px;margin:0;accent-color:var(--action-primary)">High contrast</label>
           </section>
-          <section aria-labelledby="set-out" style="display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--border-divider);padding-top:24px">
-            <h2 id="set-out" style="margin:0;font-size:20px;line-height:28px;font-weight:600">Output</h2>
-            <label for="def-format" style="font-size:14px;font-weight:500">Default output format</label>
-            <select id="def-format" value="{{ defaultFormat }}" onChange="{{ onDefaultFormat }}" style="height:44px;padding:0 12px;border:1px solid var(--border-control);border-radius:2px;background:var(--surface-panel);max-width:280px">
-              <option value="markdown">Markdown</option><option value="outline">Outline</option><option value="prompt">Prompt-ready</option>
-            </select>
+          <section aria-labelledby="set-out" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px 48px;padding:32px 0;border-top:1px solid var(--border-divider)">
+            <div style="display:flex;flex-direction:column;gap:4px"><h2 id="set-out" style="margin:0;font-size:20px;line-height:28px;font-weight:600">Output</h2><p style="margin:0;font-size:15px;line-height:24px;color:var(--text-secondary);max-width:60ch;text-wrap:pretty">The format the workspace opens with. You can still switch formats for any extract.</p></div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:24px">
+              <fieldset style="border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;min-width:0"><legend style="padding:0;margin:0 0 8px;font-size:15px;font-weight:600">Default output format</legend><sc-for list="{{ formatCards }}" as="o" hint-placeholder-count="3"><label for="{{ o.inputId }}" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 16px;border-radius:4px;border-style:solid;border-width:{{ o.bw }};border-color:{{ o.border }};background:var(--surface-panel);cursor:pointer;font-size:16px;font-weight:500" style-hover="background:var(--surface-hover)"><input type="radio" name="def-format" id="{{ o.inputId }}" checked="{{ o.on }}" onChange="{{ o.pick }}" style="width:20px;height:20px;margin:0;accent-color:var(--action-primary)"><span style="flex:1">{{ o.label }}</span><sc-if value="{{ o.on }}"><i class="ph ph-check" aria-hidden="true" style="font-size:20px;color:var(--action-primary)"></i></sc-if></label></sc-for></fieldset>
+            </div>
           </section>
-          <section aria-labelledby="set-store" style="display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--border-divider);padding-top:24px">
-            <h2 id="set-store" style="margin:0;font-size:20px;line-height:28px;font-weight:600">Storage</h2>
-            <p style="margin:0;font-size:16px;line-height:24px">{{ usageText }}</p>
-            <p style="margin:0;font-size:14px;line-height:20px;color:var(--text-secondary)">Everything is stored only in this browser. Clearing your browser data also removes your library.</p>
-            <button type="button" onClick="{{ deleteAll }}" disabled="{{ cannotDeleteAll }}" aria-describedby="del-all-note" style="height:44px;padding:0 16px;align-self:flex-start;background:var(--surface-panel);color:var(--status-error);border:1px solid var(--status-error);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:var(--status-error-soft)">Delete all saved data</button>
-            <sc-if value="{{ cannotDeleteAll }}" hint-placeholder-val="{{ false }}"><p id="del-all-note" style="margin:0;font-size:13px;color:var(--text-secondary)">Nothing is saved yet.</p></sc-if>
+          <section aria-labelledby="set-store" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px 48px;padding:32px 0;border-top:1px solid var(--border-divider);border-bottom:1px solid var(--border-divider)">
+            <div style="display:flex;flex-direction:column;gap:4px"><h2 id="set-store" style="margin:0;font-size:20px;line-height:28px;font-weight:600">Saved data</h2><p style="margin:0;font-size:15px;line-height:24px;color:var(--text-secondary);max-width:60ch;text-wrap:pretty">Your library and settings stay in this browser. Nothing is sent to a server, and clearing your browser data also removes your library.</p></div>
+            <div style="display:flex;flex-direction:column;align-items:flex-start;gap:12px">
+              <p style="margin:0;font-size:16px;line-height:24px">{{ usageText }}</p>
+              <div style="display:flex;flex-wrap:wrap;gap:12px">
+                <a href="#/library" onClick="{{ goLibrary }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:2px;border:1px solid var(--border-strong);background:var(--surface-panel);color:var(--text-primary);font-size:15px;font-weight:500;text-decoration:none;cursor:pointer" style-hover="background:var(--surface-hover)"><i class="ph ph-books" aria-hidden="true" style="font-size:18px"></i>Open library</a>
+                <button type="button" onClick="{{ deleteAll }}" disabled="{{ cannotDeleteAll }}" aria-describedby="del-all-note" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:2px;border:1px solid var(--border-strong);background:var(--surface-panel);color:var(--text-primary);font-size:15px;font-weight:500;text-decoration:none;cursor:pointer;border-color:var(--status-error);color:var(--status-error)" style-hover="background:var(--status-error-soft)"><i class="ph ph-trash" aria-hidden="true" style="font-size:18px"></i>Delete all saved data</button>
+              </div>
+              <sc-if value="{{ cannotDeleteAll }}" hint-placeholder-val="{{ false }}"><p id="del-all-note" style="margin:0;font-size:14px;color:var(--text-secondary)">Nothing is saved yet.</p></sc-if>
+            </div>
           </section>
         </div>
       </sc-if>
@@ -1291,13 +1296,14 @@ const FORMATS = [
   { v: 'outline', label: 'Outline', copy: 'Copy outline', ext: 'md' },
   { v: 'prompt', label: 'Prompt-ready', copy: 'Copy prompt', ext: 'txt' }
 ];
+const TEXT_ZOOM = { md: 1, lg: 1.125, xl: 1.25 };
 const ROUTES = ['home', 'workspace', 'library', 'workflow', 'design-system', 'faq', 'settings', 'help', 'privacy', 'terms'];
 const SECTIONS = [];
 const SLIDES = [
-  { kicker: 'Screenshot to Markdown', icon: 'ph-scan', title: 'Screenshots in. Clean Markdown out.', body: 'Drop in a screenshot of slides, docs or a whiteboard. marklith reads the text in your browser and gives it back as Markdown you can paste anywhere.', sec: ['workflow', 'See the workflow'] },
-  { kicker: 'Structure aware', icon: 'ph-tree-structure', title: 'It reads structure, not just letters.', body: 'Headings, sub-headings, numbered steps and nested bullets come back at the right level, so the outline survives the copy.', sec: ['workflow', 'Try the formats', 'formats'] },
-  { kicker: 'Private by design', icon: 'ph-lock-key', title: 'Your images never leave this device.', body: 'Text recognition runs on your own machine. No upload, no account and no copy on a server.', sec: ['faq', 'Privacy questions'] },
-  { kicker: 'Batches and library', icon: 'ph-stack', title: 'Batches in, one tidy library out.', body: 'Add up to 10 images at a time, keep adding to the same extract, then tag it and find it again in seconds.', sec: ['faq', 'Read the FAQ'] }
+  { kicker: 'Screenshot to Markdown', icon: 'ph-scan', title: 'Screenshot in, Markdown out.', body: 'Drop in a screenshot of slides, docs or a whiteboard and get its text back as clean Markdown.', sec: ['workflow', 'See the workflow'] },
+  { kicker: 'Structure aware', icon: 'ph-tree-structure', title: 'Headings and lists stay intact.', body: 'Headings, numbered steps and nested bullets come back at the right level, so the outline survives the copy.', sec: ['workflow', 'Try the formats', 'formats'] },
+  { kicker: 'Private by design', icon: 'ph-lock-key', title: 'Your images stay on your device.', body: 'Text recognition runs in your own browser. No upload, no account and no copy kept on a server.', sec: ['faq', 'Privacy questions'] },
+  { kicker: 'Batches and library', icon: 'ph-stack', title: 'Many images, one tidy library.', body: 'Add up to 10 images at a time, keep adding to the same extract, then tag it and find it again later.', sec: ['faq', 'Read the FAQ'] }
 ];
 const DEMO_TEXT = 'Team Onboarding\n\nWeek one\n\u2022 Set up your laptop\n\u25e6 Install the VPN client\n\u25e6 Request repository access\n\u2022 Meet your buddy\n\n1. Read the handbook\na. Values and rituals\nb. How we ship\n2. Book your first one-to-one';
 const MARK_RECTS = [[40, 56, 40, 144], [108, 96, 40, 104], [40, 56, 176, 40], [176, 96, 40, 28], [176, 136, 40, 26], [176, 174, 40, 26]];
@@ -1320,7 +1326,7 @@ class Component extends DCLogic {
   state = {
     route: 'home', slide: 0, heroPaused: false, heroHover: false, heroFocus: false, rm: false, faqOpen: [7], faqCat: 'all', dsMode: 'light', dsTab: 'overview', csMode: 'light', csHc: false, csCopied: '', dsSaving: 'idle', dsFmt: 'markdown', dsChipList: DS_CHIPS, dsProg: 0, demoText: DEMO_TEXT, demoFmt: 'markdown', showTop: false, section: '', heroGone: false, topDock: 0, cookieOpen: false, mainOnly: true, excluded: '', excludedCount: 0, crop: null,
     vw: 1280, vh: 800, kbOpen: false,
-    pref: 'system', contrast: false, sysDark: false, menuOpen: false,
+    pref: 'system', contrast: false, textSize: 'md', sysDark: false, menuOpen: false,
     phase: 'empty', images: [], activeImg: 0, partialNote: '', uploadError: '', dragOver: false, unsupported: [],
     format: 'markdown', lang: 'eng', progress: { stage: 0, label: '', value: 0 },
     text: '', original: '', lines: [], lowWords: [], lowIdx: 0, failReason: '', failDetail: '', confidence: 0,
@@ -1335,14 +1341,14 @@ class Component extends DCLogic {
   mainRef = React.createRef();
 
   componentDidMount() {
-    this.setState({ pref: ls.get('marklith-theme', 'system'), contrast: ls.get('marklith-contrast', 'default') === 'more', format: ls.get('marklith-format', 'markdown') });
+    this.setState({ pref: ls.get('marklith-theme', 'system'), contrast: ls.get('marklith-contrast', 'default') === 'more', format: ls.get('marklith-format', 'markdown'), textSize: TEXT_ZOOM[ls.get('marklith-text', 'md')] ? ls.get('marklith-text', 'md') : 'md' }, () => this.onResize && this.onResize());
     this.mq = matchMedia('(prefers-color-scheme: dark)');
     this.onMq = () => this.setState({ sysDark: this.mq.matches });
     this.onMq(); this.mq.addEventListener('change', this.onMq);
     this.onResize = () => {
       const vv = window.visualViewport;
       const kb = !!vv && vv.height < window.innerHeight * 0.75;
-      const vw = window.innerWidth;
+      const vw = Math.round(window.innerWidth / (TEXT_ZOOM[this.state.textSize] || 1));
       this.setState((s) => ({ vw, vh: window.innerHeight, kbOpen: kb, menuOpen: vw >= 1100 ? false : s.menuOpen }));
       if (vw >= 1100) document.body.style.overflow = '';
     };
@@ -1740,6 +1746,7 @@ class Component extends DCLogic {
     } });
   }
   setPref(p) { ls.set('marklith-theme', p); this.setState({ pref: p }); }
+  setTextSize(v) { ls.set('marklith-text', v); document.documentElement.style.setProperty('--ml-zoom', String(TEXT_ZOOM[v])); this.setState({ textSize: v }, () => this.onResize()); }
 
   renderVals() {
     const s = this.state;
@@ -1827,10 +1834,10 @@ class Component extends DCLogic {
     const slides = SLIDES.map((sl, i) => {
       const on = i === s.slide;
       return { ...sl, aria: (i + 1) + ' of ' + SLIDES.length, hidden: on ? undefined : 'true',
-        style: { gridArea: '1 / 1', display: 'flex', flexWrap: 'wrap', alignItems: 'center', alignContent: 'flex-start', gap: 'clamp(28px,5vw,72px)', minWidth: 0, opacity: on ? 1 : 0, visibility: on ? 'visible' : 'hidden', transition: on ? 'opacity 700ms ease, visibility 0s' : 'opacity 700ms ease, visibility 0s linear 700ms', zIndex: on ? 1 : 0 },
-        textStyle: { flex: '1 1 380px', minWidth: 0, maxWidth: '620px', display: 'flex', flexDirection: 'column', gap: narrow ? '16px' : '20px', transform: on ? 'none' : 'translateY(14px)', transition: 'transform 700ms cubic-bezier(.2,.8,.2,1)' },
+        style: { gridArea: '1 / 1', display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', alignContent: 'flex-start', gap: 'clamp(28px,5vw,72px)', minWidth: 0, opacity: on ? 1 : 0, visibility: on ? 'visible' : 'hidden', transition: on ? 'opacity 700ms ease, visibility 0s' : 'opacity 700ms ease, visibility 0s linear 700ms', zIndex: on ? 1 : 0 },
+        textStyle: { flex: '1 1 380px', minWidth: 0, maxWidth: '620px', display: 'flex', flexDirection: 'column', gap: narrow ? '16px' : '20px' },
         secHref: '#/' + sl.sec[0], secLabel: sl.sec[1], secGo: (e) => { e.preventDefault(); this.navigate(sl.sec[0], sl.sec[2]); },
-        art: on || i === s.prevSlide ? arts[i]('art-' + i + '-' + visits[i]) : null };
+        art: arts[i]('art-' + i + '-' + visits[i]) };
     });
     const dots = SLIDES.map((sl, i) => ({ aria: 'Show slide ' + (i + 1) + ': ' + sl.title, current: i === s.slide ? 'true' : undefined, go: () => this.goSlide(i),
       bar: { position: 'relative', display: 'block', width: i === s.slide ? (narrow ? '44px' : '64px') : (narrow ? '20px' : '32px'), height: '4px', background: 'var(--border-divider)', overflow: 'hidden', borderRadius: '2px', transition: 'width 300ms ease' },
@@ -2058,6 +2065,16 @@ class Component extends DCLogic {
       noResultsText: `No extracts match${s.q ? ` "${s.q}"` : ''}${activeFilters.length ? ` with ${activeFilters.length} ${activeFilters.length === 1 ? 'filter' : 'filters'}` : ''}.`,
       goWorkspace: (e) => { e && e.preventDefault(); this.navigate('workspace'); }, goHelp: (e) => { e && e.preventDefault(); this.navigate('help'); }, goLibrary: (e) => { e && e.preventDefault(); this.navigate('library'); }, goWorkspaceFocus: (e) => { e && e.preventDefault(); this.navigate('workspace'); }, goSettings: (e) => { e && e.preventDefault(); this.navigate('settings'); },
       // settings
+      ...(() => {
+        const mk = (id, label, on, pick) => ({ inputId: id, label, on, pick, bw: on ? '2px' : '1px', border: on ? 'var(--action-primary)' : 'var(--border-control)' });
+        const setC = (c) => { ls.set('marklith-contrast', c ? 'more' : 'default'); this.setState({ contrast: c }); };
+        return {
+          themeCards: [['system', 'System'], ['light', 'Light'], ['dark', 'Dark']].map(([v, l]) => mk('th-' + v, l, s.pref === v, () => this.setPref(v))),
+          contrastCards: [[false, 'Standard'], [true, 'High contrast']].map(([v, l]) => mk('ct-' + (v ? 'hi' : 'std'), l, s.contrast === v, () => setC(v))),
+          textCards: [['md', 'Default', '16px'], ['lg', 'Large', '19px'], ['xl', 'Extra large', '22px']].map(([v, l, fs]) => ({ ...mk('tx-' + v, l, s.textSize === v, () => this.setTextSize(v)), fs })),
+          formatCards: FORMATS.map((x) => mk('fm-' + x.v, x.label, s.format === x.v, () => { ls.set('marklith-format', x.v); this.setState({ format: x.v }); }))
+        };
+      })(),
       themeOpts, contrastMore: s.contrast, toggleContrast: () => { const c = !s.contrast; ls.set('marklith-contrast', c ? 'more' : 'default'); this.setState({ contrast: c }); },
       themeNow: s.pref === 'system' ? `Following your system setting, currently ${mode}.` : `${mode === 'dark' ? 'Dark' : 'Light'} theme, saved in this browser.`,
       defaultFormat: s.format, onDefaultFormat: (e) => { ls.set('marklith-format', e.target.value); this.setState({ format: e.target.value }); },
