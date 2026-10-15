@@ -10,10 +10,28 @@
 <helmet>
 <title>marklith</title>
 <meta name="description" content="Upload a screenshot or photo, extract its text in your browser, correct it, and copy it as Markdown, an outline or prompt-ready text.">
+<link rel="canonical" href="https://marklith.onrender.com/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="marklith">
+<meta property="og:title" content="marklith: image text to Markdown, in your browser">
+<meta property="og:description" content="Extract text from screenshots and photos in your browser, correct it, and copy it as Markdown, an outline or prompt-ready text.">
+<meta property="og:url" content="https://marklith.onrender.com/">
+<meta property="og:image" content="https://marklith.onrender.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="marklith wordmark with the line: Image text to Markdown, in your browser.">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="marklith: image text to Markdown, in your browser">
+<meta name="twitter:description" content="Extract text from screenshots and photos in your browser, correct it, and copy it as Markdown, an outline or prompt-ready text.">
+<meta name="twitter:image" content="https://marklith.onrender.com/assets/og-image.png">
+<link rel="icon" href="./favicon.ico" sizes="any">
 <link rel="icon" href="./assets/favicon/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="./assets/favicon/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="./assets/favicon/apple-touch-icon.png">
-<link rel="manifest" href="./assets/favicon/site.webmanifest">
+<link rel="manifest" href="./site.webmanifest">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"marklith","url":"https://marklith.onrender.com/","description":"Extract text from screenshots and photos in your browser and copy it as Markdown, an outline or prompt-ready text.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any modern browser","offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"image":"https://marklith.onrender.com/assets/og-image.png"}</script>
 <meta name="theme-color" content="#17243A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -178,6 +196,24 @@ body{zoom:var(--ml-zoom,1)}
 
       <sc-if value="{{ isAppPage }}" hint-placeholder-val="{{ false }}">
       <div style="max-width:1360px;margin:0 auto;padding:clamp(20px,3vw,40px) clamp(16px,3vw,40px) 120px;display:flex;flex-direction:column;gap:24px">
+      <nav aria-label="Breadcrumb" style="margin-bottom:-12px">
+        <ol style="list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;align-items:center;gap:0 8px;font-size:14px;line-height:20px">
+          <sc-for list="{{ crumbs }}" as="c" hint-placeholder-count="2">
+            <li style="display:flex;align-items:center;gap:8px;min-height:32px">
+              <sc-if value="{{ c.link }}" hint-placeholder-val="{{ true }}">
+                <a href="{{ c.href }}" onClick="{{ c.go }}" style="color:var(--text-secondary);text-decoration:underline;text-decoration-color:transparent;text-underline-offset:3px;display:inline-flex;align-items:center;gap:6px;min-height:32px;border-radius:2px" style-hover="color:var(--text-primary);text-decoration-color:currentColor">
+                  <sc-if value="{{ c.home }}" hint-placeholder-val="{{ false }}"><i class="ph ph-house" aria-hidden="true" style="font-size:16px"></i></sc-if>
+                  <span>{{ c.label }}</span>
+                </a>
+                <i class="ph ph-caret-right" aria-hidden="true" style="font-size:12px;color:var(--text-secondary)"></i>
+              </sc-if>
+              <sc-if value="{{ c.current }}" hint-placeholder-val="{{ false }}">
+                <span aria-current="page" style="color:var(--text-primary);font-weight:500">{{ c.label }}</span>
+              </sc-if>
+            </li>
+          </sc-for>
+        </ol>
+      </nav>
       <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap">
         <h1 style="margin:0;font-size:clamp(28px,2.4vw,32px);line-height:1.25;font-weight:600;letter-spacing:-0.01em">{{ pageTitle }}</h1>
         <sc-if value="{{ isWorkspace }}" hint-placeholder-val="{{ true }}">
@@ -1310,6 +1346,7 @@ const MARK_RECTS = [[40, 56, 40, 144], [108, 96, 40, 104], [40, 56, 176, 40], [1
 const MARK_SMALL = [[40, 56, 40, 144], [108, 96, 40, 104], [40, 56, 176, 40], [176, 96, 40, 44], [176, 160, 40, 40]];
 const WORD_SVG = '<path d="M8 200V100 M8 140A32 32 0 0 1 72 140V200 M72 140A32 32 0 0 1 136 140V200 M260 100V200 M300 200V100 M300 142A34 34 0 0 1 334 108H350 M372 60V200 M472 60V200 M512 100V200 M560 60V200 M540 108H584 M612 60V200 M612 140A32 32 0 0 1 676 140V200" fill="none" stroke="#17243A" stroke-width="16"/><circle cx="218" cy="150" r="42" fill="none" stroke="#17243A" stroke-width="16"/><g fill="#17243A"><polygon points="414,100 434,100 380,181 380,151"/><polygon points="390.4,165.4 400.4,150.5 440,200 418,200"/><rect x="504" y="60" width="16" height="16"/></g>';
 const rectsSvg = (rs) => rs.map(([x, y, w, h]) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '"/>').join('');
+const PAGE_TITLES = { workspace: 'Workspace', library: 'Library', workflow: 'Workflow', 'design-system': 'Design system', faq: 'Questions and answers', privacy: 'Privacy policy', terms: 'Terms and conditions', settings: 'Settings', help: 'Help and privacy' };
 const DS_TABS = [['overview', 'Overview', 'ph-compass'], ['logo', 'Logo', 'ph-hexagon'], ['colour', 'Colour', 'ph-palette'], ['components', 'Components', 'ph-squares-four']];
 const lum = (hx) => { const c = [1, 3, 5].map((i) => parseInt(hx.slice(i, i + 2), 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4))); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
 const cratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
@@ -1340,6 +1377,12 @@ class Component extends DCLogic {
   fileRef = React.createRef();
   mainRef = React.createRef();
 
+  componentDidUpdate() {
+    const s = this.state; let t = PAGE_TITLES[s.route] || '';
+    if (s.route === 'design-system' && s.dsTab && s.dsTab !== 'overview') t = ((DS_TABS.find((x) => x[0] === s.dsTab) || [, ''])[1]) + ', Design system';
+    const title = t ? t + ' | marklith' : 'marklith: image text to Markdown, in your browser';
+    if (document.title !== title) document.title = title;
+  }
   componentDidMount() {
     this.setState({ pref: ls.get('marklith-theme', 'system'), contrast: ls.get('marklith-contrast', 'default') === 'more', format: ls.get('marklith-format', 'markdown'), textSize: TEXT_ZOOM[ls.get('marklith-text', 'md')] ? ls.get('marklith-text', 'md') : 'md' }, () => this.onResize && this.onResize());
     this.mq = matchMedia('(prefers-color-scheme: dark)');
@@ -1924,7 +1967,15 @@ class Component extends DCLogic {
       route: s.route, isWorkspace: s.route === 'workspace', isLibrary: s.route === 'library', isSettings: s.route === 'settings', isHelp: s.route === 'help',
       navItems, menuOpen: s.menuOpen && !isNav, menuExpanded: s.menuOpen ? 'true' : 'false', toggleMenu: () => this.toggleMenu(), closeMenu: () => this.toggleMenu(false),
       skip: (e) => { e.preventDefault(); this.mainRef.current && this.mainRef.current.focus(); }, mainRef: this.mainRef,
-      pageTitle: { workspace: 'Workspace', library: 'Library', workflow: 'Workflow', 'design-system': 'Design system', faq: 'Questions and answers', privacy: 'Privacy policy', terms: 'Terms and conditions', settings: 'Settings', help: 'Help and privacy' }[s.route],
+      pageTitle: PAGE_TITLES[s.route],
+      crumbs: (() => {
+        const c = [{ label: 'Home', href: '#/', home: true, link: true, go: (e) => { e.preventDefault(); this.navigate('home'); } }];
+        const isDsSub = s.route === 'design-system' && s.dsTab && s.dsTab !== 'overview';
+        if (isDsSub) c.push({ label: 'Design system', href: '#/design-system', link: true, go: (e) => { e.preventDefault(); this.goDsTab('overview'); } });
+        const last = isDsSub ? (DS_TABS.find((x) => x[0] === s.dsTab) || [, ''])[1] : PAGE_TITLES[s.route];
+        c.push({ label: last, current: true });
+        return c;
+      })(),
       isPrivacy: s.route === 'privacy', isTerms: s.route === 'terms',
       goPrivacy: (e) => { e && e.preventDefault(); this.navigate('privacy'); }, goTerms: (e) => { e && e.preventDefault(); this.navigate('terms'); },
       cookieOpen: s.cookieOpen, openCookies: () => { this.setState({ cookieOpen: true }); this.focusLater('ck-close'); }, closeCookies: () => { this.setState({ cookieOpen: false }); this.refocus('cookie-btn'); },
