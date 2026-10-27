@@ -99,7 +99,17 @@
   const HOLD=1.4,ROLL=0.8,START=500;
   const slots=new Set();
   const live=(s)=>s._vis&&s.isConnected&&!s.closest('[aria-hidden="true"]:not([data-rot])');
-  function rotSync(){slots.forEach(s=>{if(!s.isConnected){slots.delete(s);return}if(!s._tl)return;
+  // Hero slots are scrubbed from the slide progress bar (single clock): rolls finish before the slide fades, no loop-back, pause/hover stay in sync
+  const HERO_SL='[aria-roledescription="slide"]',HFIRST=1.8,HLAST=5.6;let hRaf=0;
+  function heroClock(){hRaf=0;let any=false;
+    const fill=document.querySelector('#hero [style*="mlProgress"]'),an=fill&&fill.getAnimations?fill.getAnimations()[0]:null;
+    const t=an&&an.currentTime!=null?an.currentTime/1000:0;
+    slots.forEach(s=>{if(!s._hero||!s._tl)return;if(!s.isConnected){slots.delete(s);return}any=true;
+      const sl=s.closest(HERO_SL),on=sl&&sl.getAttribute('aria-hidden')!=='true';
+      if(on){if(Math.abs(s._tl.time()-t)>0.001)s._tl.time(Math.min(t,s._tl.duration()))}
+      else if(s._tl.time()!==0&&getComputedStyle(sl).visibility==='hidden')s._tl.time(0)});
+    if(any)hRaf=requestAnimationFrame(heroClock)}
+  function rotSync(){slots.forEach(s=>{if(!s.isConnected){slots.delete(s);return}if(!s._tl||s._hero)return;
     if(!live(s)){clearTimeout(s._t);s._t=0;s._tl.pause(0)}
     else if(s._tl.paused()&&!s._t){const wait=Math.max(0,(s._busy||0)-performance.now())+START;s._t=setTimeout(()=>{s._t=0;if(!live(s))return;if((s._busy||0)>performance.now()){rotSync();return}s._tl.play()},wait)}})}
   function rot(slot){
@@ -108,7 +118,14 @@
     g.set(slot,{width:words[0].offsetWidth});
     words.forEach(w=>{w.style.position='absolute';w.style.left='0';w.style.top='0'});
     g.set(words.slice(1),{yPercent:115});words.forEach(w=>{w.style.visibility='visible'});
-    const n=words.length,tl=g.timeline({repeat:-1,paused:true});
+    const n=words.length;
+    if(slot.closest('#hero '+HERO_SL)){slot._hero=1;const tl=g.timeline({paused:true}),step=n>2?(HLAST-ROLL-HFIRST)/(n-2):0;
+      for(let i=0;i<n-1;i++){const cur=words[i],next=words[i+1],t=HFIRST+i*step;
+        tl.fromTo(cur,{yPercent:0},{yPercent:-115,duration:ROLL,ease:'power3.inOut',immediateRender:false},t)
+          .fromTo(next,{yPercent:115},{yPercent:0,duration:ROLL,ease:'power3.inOut',immediateRender:false},t)
+          .fromTo(slot,{width:()=>cur.offsetWidth},{width:()=>next.offsetWidth,duration:ROLL,ease:'expo.inOut',immediateRender:false},t)}
+      tl.time(0);slot._tl=tl;slot._words=words;slots.add(slot);if(!hRaf)hRaf=requestAnimationFrame(heroClock);return}
+    const tl=g.timeline({repeat:-1,paused:true});
     words.forEach((cur,i)=>{const next=words[(i+1)%n],t=i*(HOLD+ROLL)+HOLD;
       tl.to(cur,{yPercent:-115,duration:ROLL,ease:'power3.inOut'},t)
         .fromTo(next,{yPercent:115},{yPercent:0,duration:ROLL,ease:'power3.inOut',immediateRender:false},t)
