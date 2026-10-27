@@ -65,6 +65,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
 @keyframes mlFade{from{opacity:0}to{opacity:1}}
 @keyframes mlShake{0%,100%{transform:none}15%{transform:translateX(-7px)}35%{transform:translateX(6px)}55%{transform:translateX(-4px)}75%{transform:translateX(3px)}90%{transform:translateX(-1.5px)}}
 @keyframes mlShimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+@keyframes mlFadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 @keyframes mlVtOut{to{opacity:0;transform:translateY(-6px)}}
 @keyframes mlVtIn{from{opacity:0;transform:translateY(10px)}}
 .ml-shake{animation:mlShake 520ms ease-in-out}
@@ -274,11 +275,25 @@ body{zoom:var(--ml-zoom,1)}
           <sc-if value="{{ hasRecent }}" hint-placeholder-val="{{ false }}">
             <section aria-labelledby="recent-h" style="display:flex;flex-direction:column;gap:8px;max-width:880px">
               <h2 id="recent-h" style="margin:0;font-size:20px;line-height:28px;font-weight:600">Recent extracts</h2>
-              <ul style="list-style:none;margin:0;padding:0;border-top:1px solid var(--border-divider)">
+              <sc-if value="{{ recentLoading }}" hint-placeholder-val="{{ false }}">
+                <p role="status" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Loading recent extracts</p>
+                <ul aria-hidden="true" style="list-style:none;margin:0;padding:0;border-top:1px solid var(--border-divider)">
+                  <sc-for list="{{ skelRows }}" as="k" hint-placeholder-count="3">
+                    <li style="position:relative;overflow:hidden;padding:14px 4px;border-bottom:1px solid var(--border-divider);display:flex;flex-direction:column;gap:8px">
+                      <span style="display:block;height:16px;width:{{ k.w1 }};background:var(--border-divider);border-radius:3px"></span>
+                      <span style="display:block;height:11px;width:34%;background:var(--border-divider);border-radius:3px;opacity:0.8"></span>
+                      <span data-skel-sweep="" style="{{ skelSweep }}"></span>
+                    </li>
+                  </sc-for>
+                </ul>
+              </sc-if>
+              <sc-if value="{{ recentReady }}" hint-placeholder-val="{{ true }}">
+              <ul style="animation:mlFadeIn 420ms cubic-bezier(.2,.7,.2,1) both;list-style:none;margin:0;padding:0;border-top:1px solid var(--border-divider)">
                 <sc-for list="{{ recent }}" as="r" hint-placeholder-count="3">
                   <li style="border-bottom:1px solid var(--border-divider)"><a href="#/workspace" onClick="{{ r.open }}" style="display:flex;flex-direction:column;gap:2px;padding:12px 4px;color:var(--text-primary);text-decoration:none" style-hover="background:var(--surface-hover)" style-active="background:var(--border-divider)"><span style="font-weight:600">{{ r.title }}</span><span style="font-size:13px;color:var(--text-secondary)">{{ r.meta }}</span></a></li>
                 </sc-for>
               </ul>
+              </sc-if>
               <a href="#/library" onClick="{{ goLibrary }}" style="min-height:44px;display:inline-flex;align-items:center;font-size:14px;font-weight:500;align-self:flex-start">View library</a>
             </section>
           </sc-if>
@@ -304,9 +319,15 @@ body{zoom:var(--ml-zoom,1)}
                     <sc-if value="{{ hasActiveUrl }}" hint-placeholder-val="{{ false }}">{{ activeImg }}</sc-if><sc-if value="{{ activeCompressing }}" hint-placeholder-val="{{ false }}"><p role="status" style="margin:0;padding:48px 24px;font-size:14px;color:var(--text-secondary)">Compressing image</p></sc-if>
                     <sc-if value="{{ hasHighlight }}" hint-placeholder-val="{{ false }}"><div aria-hidden="true" style="{{ highlight }}"></div></sc-if>
                     <sc-if value="{{ activeReading }}" hint-placeholder-val="{{ false }}"><div aria-hidden="true" style="position:absolute;inset:0;background:rgb(23 36 58 / .28);overflow:hidden"><div style="position:absolute;left:0;right:0;height:2px;background:var(--action-primary);box-shadow:0 0 0 6px var(--highlight);animation:mlSweep 1.6s ease-in-out infinite alternate"></div><span style="position:absolute;left:12px;top:12px;display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--surface-panel);color:var(--text-primary);border-radius:2px;font-size:13px;font-weight:500;box-shadow:var(--elevation-overlay)"><span style="width:14px;height:14px;border:2px solid var(--action-primary);border-top-color:transparent;border-radius:50%;animation:mlSpin .8s linear infinite"></span>Reading text</span></div></sc-if>
+                    <sc-if value="{{ pickOn }}" hint-placeholder-val="{{ false }}"><div onPointerDown="{{ pickDown }}" onPointerMove="{{ pickMove }}" onPointerUp="{{ pickUp }}" onPointerCancel="{{ pickCancel }}" aria-hidden="true" style="position:absolute;inset:0;cursor:crosshair;touch-action:none;user-select:none;-webkit-user-select:none;background:rgb(23 36 58 / .10);outline:2px dashed var(--action-primary);outline-offset:-2px"><sc-if value="{{ hasPickRect }}" hint-placeholder-val="{{ false }}"><div style="{{ pickRectStyle }}"><sc-if value="{{ pickBusy }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;left:0;top:-30px;display:flex;align-items:center;gap:6px;padding:4px 8px;background:var(--surface-panel);color:var(--text-primary);border-radius:2px;font-size:12px;font-weight:500;white-space:nowrap;box-shadow:var(--elevation-overlay)"><span style="width:12px;height:12px;border:2px solid var(--action-primary);border-top-color:transparent;border-radius:50%;animation:mlSpin .8s linear infinite"></span>Reading area</span></sc-if></div></sc-if></div></sc-if>
                                       </div>
                   <figcaption style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:18px;color:var(--text-secondary);overflow-wrap:anywhere"><sc-if value="{{ activeDone }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:6px;padding:3px 8px;background:var(--status-success-soft);color:var(--status-success);border-radius:2px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:500"><i class="ph ph-check-circle" aria-hidden="true" style="font-size:15px"></i>Read</span></sc-if><span>{{ fileInfo }}</span></figcaption>
                 </figure>
+                <sc-if value="{{ canPick }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px">
+                  <sc-if value="{{ pickOn }}" hint-placeholder-val="{{ false }}"><button type="button" id="pick-btn" onClick="{{ togglePick }}" aria-pressed="true" style="height:44px;padding:0 14px;display:inline-flex;align-items:center;gap:8px;background:var(--action-primary);color:var(--text-on-action);border:1px solid var(--action-primary);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer;flex:none" style-hover="background:var(--action-primary-hover)"><i class="ph ph-check" aria-hidden="true" style="font-size:18px"></i>Done selecting</button></sc-if>
+                  <sc-if value="{{ pickOff }}" hint-placeholder-val="{{ true }}"><button type="button" id="pick-btn" onClick="{{ togglePick }}" aria-pressed="false" style="height:44px;padding:0 14px;display:inline-flex;align-items:center;gap:8px;background:var(--surface-panel);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer;flex:none" style-hover="background:var(--surface-hover)"><i class="ph ph-selection-plus" aria-hidden="true" style="font-size:18px"></i>Read an area</button></sc-if>
+                  <span style="flex:1 1 220px;min-width:0;font-size:13px;line-height:18px;color:var(--text-secondary);text-wrap:pretty">{{ pickHint }}</span>
+                </div></sc-if>
                 <sc-if value="{{ multi }}" hint-placeholder-val="{{ false }}">
                   <ol aria-label="Images in this batch, in reading order" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;max-height:320px;overflow:auto">
                     <sc-for list="{{ thumbs }}" as="t" hint-placeholder-count="2">
@@ -420,6 +441,7 @@ body{zoom:var(--ml-zoom,1)}
                   </div>
                   <sc-if value="{{ hasExcluded }}" hint-placeholder-val="{{ false }}"><div role="status" style="margin:0;padding:10px 12px;background:var(--status-info-soft);font-size:14px;line-height:20px;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center"><span style="display:flex;gap:10px;align-items:baseline;flex:1 1 240px"><span style="width:10px;height:10px;border:2px solid var(--status-info);border-radius:50%;flex:none;transform:translateY(1px)"></span><span><strong style="font-weight:600;color:var(--status-info)">Main text only.</strong> {{ excludedNote }}</span></span><span style="display:flex;gap:4px"><button type="button" onClick="{{ addExcluded }}" style="height:36px;padding:0 10px;background:var(--surface-panel);border:1px solid var(--border-strong);border-radius:2px;font-size:13px;font-weight:500;cursor:pointer;color:var(--text-primary)">Add it back</button><button type="button" onClick="{{ dismissExcluded }}" aria-label="Dismiss left-out text notice" style="width:36px;height:36px;background:none;border:0;cursor:pointer;color:var(--text-primary)"><i class="ph ph-x" aria-hidden="true" style="font-size:16px"></i></button></span></div></sc-if>
                   <sc-if value="{{ hasPartial }}" hint-placeholder-val="{{ false }}"><p role="status" style="margin:0;padding:10px 12px;background:var(--status-warning-soft);font-size:14px;line-height:20px;display:flex;gap:10px;align-items:baseline"><span style="width:9px;height:9px;background:var(--status-warning);transform:translateY(1px) rotate(45deg);flex:none"></span><span><strong style="font-weight:600;color:var(--status-warning)">Check.</strong> {{ partialNote }}</span></p></sc-if>
+                  <sc-if value="{{ isScanning }}" hint-placeholder-val="{{ false }}"><div role="status" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:6px 6px 6px 12px;background:var(--surface-sunken, var(--status-info-soft));border:1px solid var(--border-divider);border-radius:2px;font-size:14px;line-height:20px"><span style="display:flex;align-items:center;gap:10px;min-width:0"><i class="ph ph-scan" aria-hidden="true" style="font-size:18px;color:var(--status-info);flex:none"></i><span>{{ scanText }}</span></span><button type="button" onClick="{{ stopScan }}" style="height:36px;padding:0 12px;background:var(--surface-panel);border:1px solid var(--border-strong);border-radius:2px;font-size:13px;font-weight:500;cursor:pointer;color:var(--text-primary)">Stop</button></div></sc-if>
                   <label for="extract-text" style="font-size:13px;line-height:18px;color:var(--text-secondary)">Edit the text to match the image. The output updates as you type.</label>
                   <textarea id="extract-text" ref="{{ editorRef }}" value="{{ text }}" onChange="{{ onText }}" onSelect="{{ onCaret }}" onClick="{{ onCaret }}" onKeyUp="{{ onCaret }}" spellCheck="false" autoCapitalize="off" autoCorrect="off" style="width:100%;min-height:320px;height:52vh;resize:vertical;padding:14px 16px;border:1px solid var(--border-control);border-radius:2px;background:var(--surface-page);color:var(--text-primary);font-family:'IBM Plex Mono',monospace;font-size:14px;line-height:22px;font-variant-ligatures:none;tab-size:2"></textarea>
                   <div style="display:flex;flex-wrap:wrap;gap:8px">
@@ -500,9 +522,9 @@ body{zoom:var(--ml-zoom,1)}
                           </sc-if>
                         </div>
                         <sc-if value="{{ hasSaveError }}" hint-placeholder-val="{{ false }}"><p role="alert" style="margin:0;padding:10px 12px;background:var(--status-error-soft);font-size:14px;line-height:20px"><strong style="color:var(--status-error);font-weight:600">Not saved.</strong> {{ saveError }} Your work is still open.</p></sc-if>
-                        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
-                          <button type="submit" aria-busy="{{ saving }}" disabled="{{ saving }}" style="height:44px;min-width:160px;padding:0 20px;background:var(--action-primary);color:var(--text-on-action);border:0;border-radius:2px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:var(--action-primary-hover)" style-active="box-shadow:inset 0 0 0 1px var(--border-strong)">{{ saveBtnLabel }}</button>
-                          <sc-if value="{{ isSavedItem }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ deleteCurrent }}" style="height:44px;padding:0 16px;background:var(--surface-panel);color:var(--status-error);border:1px solid var(--status-error);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:var(--status-error-soft)">Delete extract</button></sc-if>
+                        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end">
+                          <sc-if value="{{ isSavedItem }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ deleteCurrent }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;background:var(--surface-panel);color:var(--status-error);border:1px solid var(--status-error);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:var(--status-error-soft)"><i class="ph ph-trash" aria-hidden="true" style="font-size:18px"></i>Delete extract</button></sc-if>
+                          <button type="submit" aria-busy="{{ saving }}" disabled="{{ saving }}" style="position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;min-width:160px;padding:0 20px;background:var(--action-primary);color:var(--text-on-action);border:0;border-radius:2px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:var(--action-primary-hover)" style-active="box-shadow:inset 0 0 0 1px var(--border-strong)"><i class="ph ph-floppy-disk" aria-hidden="true" style="font-size:18px"></i>{{ saveBtnLabel }}<sc-if value="{{ saving }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="{{ skelSweep }}"></span></sc-if></button>
                         </div>
                       </form>
                     </section>
@@ -589,21 +611,21 @@ body{zoom:var(--ml-zoom,1)}
                 </div>
               </sc-if>
               <sc-if value="{{ libEmpty }}" hint-placeholder-val="{{ false }}">
-                <div style="padding:48px 24px;border:1px solid var(--border-divider);background:var(--surface-panel);display:flex;flex-direction:column;gap:10px;align-items:flex-start">
+                <div style="animation:mlFadeIn 420ms cubic-bezier(.2,.7,.2,1) both;padding:48px 24px;border:1px solid var(--border-divider);background:var(--surface-panel);display:flex;flex-direction:column;gap:10px;align-items:flex-start">
                   <h3 style="margin:0;font-size:16px;font-weight:600">Nothing saved yet</h3>
                   <p style="margin:0;font-size:14px;line-height:20px;color:var(--text-secondary);max-width:52ch">Extracts you save from the workspace appear here, with their image, text, category and tags.</p>
                   <a href="#/workspace" onClick="{{ goWorkspace }}" style="min-height:44px;display:inline-flex;align-items:center;font-weight:500">Go to workspace</a>
                 </div>
               </sc-if>
               <sc-if value="{{ libNoResults }}" hint-placeholder-val="{{ false }}">
-                <div style="padding:32px 24px;border:1px solid var(--border-divider);background:var(--surface-panel);display:flex;flex-direction:column;gap:10px;align-items:flex-start">
+                <div style="animation:mlFadeIn 420ms cubic-bezier(.2,.7,.2,1) both;padding:32px 24px;border:1px solid var(--border-divider);background:var(--surface-panel);display:flex;flex-direction:column;gap:10px;align-items:flex-start">
                   <h3 style="margin:0;font-size:16px;font-weight:600">{{ noResultsText }}</h3>
                   <p style="margin:0;font-size:14px;line-height:20px;color:var(--text-secondary)">Search looks in titles, extracted text, categories and tags.</p>
                   <button type="button" onClick="{{ clearFilters }}" style="height:44px;padding:0 16px;background:var(--surface-panel);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:var(--surface-hover)" style-active="background:var(--border-divider)">Clear search and filters</button>
                 </div>
               </sc-if>
               <sc-if value="{{ libHasResults }}" hint-placeholder-val="{{ false }}">
-                <ul style="list-style:none;margin:0;padding:0;border:1px solid var(--border-divider);background:var(--surface-panel)">
+                <ul style="animation:mlFadeIn 420ms cubic-bezier(.2,.7,.2,1) both;list-style:none;margin:0;padding:0;border:1px solid var(--border-divider);background:var(--surface-panel)">
                   <sc-for list="{{ results }}" as="r" hint-placeholder-count="3">
                     <li style="border-bottom:1px solid var(--border-divider);animation:mlFade 380ms ease both">
                       <article aria-labelledby="{{ r.id }}">
@@ -1192,8 +1214,8 @@ body{zoom:var(--ml-zoom,1)}
         </div>
       </div>
       </sc-if>
-      <div style="display:flex;flex-wrap:wrap;gap:40px 48px;padding:44px 0">
-        <div style="flex:2 1 280px;display:flex;flex-direction:column;gap:14px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:40px 48px;padding:44px 0;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
           <a href="#/" onClick="{{ goHome }}" aria-label="marklith, home" style="display:flex;align-items:center;gap:10px;color:#FFFFFF;text-decoration:none;align-self:flex-start;min-height:44px">
             <svg width="32" height="32" aria-hidden="true" style="color:#FFFFFF"><use href="#ml-mark"></use></svg>
             <svg width="96" height="20" aria-hidden="true" style="color:#FFFFFF"><use href="#ml-word"></use></svg>
@@ -1201,18 +1223,20 @@ body{zoom:var(--ml-zoom,1)}
           <p style="margin:0;color:#C3CBD8;max-width:38ch;font-size:15px;line-height:22px">Reads the text in your screenshots and photos, then hands it back as Markdown, an outline or prompt-ready text.</p>
           <p style="margin:0;display:flex;align-items:center;gap:8px;color:#C3CBD8;font-size:14px"><i class="ph ph-lock-key" aria-hidden="true" style="font-size:16px;color:#8FB0FF"></i>Processed on this device</p>
         </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:32px 24px;align-items:start;min-width:0">
         <sc-for list="{{ footerGroups }}" as="g" hint-placeholder-count="3">
-          <nav aria-label="{{ g.title }}" style="flex:1 1 150px;display:flex;flex-direction:column">
-            <h3 style="margin:0 0 8px;font-size:14px;font-weight:600;color:#C3CBD8">{{ g.title }}</h3>
+          <nav aria-label="{{ g.title }}" style="display:flex;flex-direction:column;min-width:0">
+            <h3 style="margin:12px 0 8px;font-size:14px;line-height:20px;font-weight:600;color:#C3CBD8">{{ g.title }}</h3>
             <sc-for list="{{ g.links }}" as="n"><a href="{{ n.href }}" onClick="{{ n.go }}" style="text-align:left;background:none;border:0;padding:0;min-height:40px;display:flex;align-items:center;font-size:16px;color:#FFFFFF;text-decoration:none" style-hover="color:#8FB0FF;text-decoration:underline">{{ n.label }}</a></sc-for>
           </nav>
         </sc-for>
-        <nav aria-label="Brand" style="flex:1 1 150px;display:flex;flex-direction:column">
-          <h3 style="margin:0 0 8px;font-size:14px;font-weight:600;color:#C3CBD8">Brand</h3>
+        <nav aria-label="Brand" style="display:flex;flex-direction:column;min-width:0">
+          <h3 style="margin:12px 0 8px;font-size:14px;line-height:20px;font-weight:600;color:#C3CBD8">Brand</h3>
           <a href="#/design-system/components" onClick="{{ goDsComponents }}" style="text-align:left;background:none;border:0;padding:0;min-height:40px;display:flex;align-items:center;font-size:16px;color:#FFFFFF;text-decoration:none" style-hover="color:#8FB0FF;text-decoration:underline">Components</a>
           <a href="#/design-system/colour" onClick="{{ goDsColour }}" style="text-align:left;background:none;border:0;padding:0;min-height:40px;display:flex;align-items:center;font-size:16px;color:#FFFFFF;text-decoration:none" style-hover="color:#8FB0FF;text-decoration:underline">Colour scheme</a>
           <a href="#/design-system/logo" onClick="{{ goDsLogo }}" style="text-align:left;background:none;border:0;padding:0;min-height:40px;display:flex;align-items:center;font-size:16px;color:#FFFFFF;text-decoration:none" style-hover="color:#8FB0FF;text-decoration:underline">Logo</a>
         </nav>
+        </div>
       </div>
       <div style="border-top:1px solid #33435E;padding:20px 0 28px;display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;align-items:center;font-size:14px;color:#C3CBD8">
         <div style="flex:1 1 320px;display:flex;flex-direction:column;gap:4px">
@@ -1235,7 +1259,7 @@ body{zoom:var(--ml-zoom,1)}
       <sc-if value="{{ isReview }}" hint-placeholder-val="{{ false }}">
         <div style="position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;gap:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:var(--surface-panel);border-top:1px solid var(--border-divider)">
           <button type="button" onClick="{{ copy }}" style="flex:1;height:44px;padding:0 12px;background:var(--action-primary);color:var(--text-on-action);border:0;border-radius:2px;font-size:14px;font-weight:500;cursor:pointer">{{ copyLabel }}</button>
-          <button type="button" id="open-save" onClick="{{ openSave }}" style="flex:1;height:44px;padding:0 12px;background:var(--surface-panel);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer">{{ saveBtnLabel }}</button>
+          <button type="button" id="open-save" onClick="{{ openSave }}" style="position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;flex:1;height:44px;padding:0 12px;background:var(--surface-panel);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer"><i class="ph ph-floppy-disk" aria-hidden="true" style="font-size:18px"></i>{{ saveBtnLabel }}<sc-if value="{{ saving }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="{{ skelSweep }}"></span></sc-if></button>
         </div>
       </sc-if>
     </sc-if>
@@ -1246,7 +1270,7 @@ body{zoom:var(--ml-zoom,1)}
       <div role="dialog" aria-modal="true" aria-labelledby="save-dlg-h" data-trap="on" onClick="{{ stop }}" style="width:100%;max-height:90vh;overflow:auto;background:var(--surface-raised);border-radius:4px 4px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:14px;box-shadow:var(--elevation-overlay)">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
           <h2 id="save-dlg-h" style="margin:0;font-size:20px;line-height:28px;font-weight:600">Save to library</h2>
-          <button type="button" onClick="{{ closeSave }}" style="height:44px;padding:0 12px;background:transparent;border:1px solid var(--border-control);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer">Close</button>
+          <button type="button" onClick="{{ closeSave }}" aria-label="Close save dialog" style="width:44px;height:44px;flex:none;display:grid;place-items:center;background:transparent;border:0;border-radius:4px;cursor:pointer;color:var(--text-secondary)" style-hover="background:var(--surface-hover);color:var(--text-primary)"><i class="ph ph-x" aria-hidden="true" style="font-size:20px"></i></button>
         </div>
         <form onSubmit="{{ submitSave }}" noValidate="{{ true }}" style="display:flex;flex-direction:column;gap:14px">
           <div style="display:flex;flex-direction:column;gap:6px">
@@ -1266,8 +1290,7 @@ body{zoom:var(--ml-zoom,1)}
             <sc-if value="{{ hasTags }}" hint-placeholder-val="{{ false }}"><ul aria-label="Added tags" style="list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ saveTags }}" as="t"><li style="display:flex;align-items:center;height:32px;padding-left:10px;border:1px solid var(--border-control);border-radius:2px;font-size:14px">{{ t.label }}<button type="button" aria-label="{{ t.aria }}" onClick="{{ t.remove }}" style="width:44px;height:44px;margin:-6px -6px -6px 0;background:none;border:0;cursor:pointer;font-size:16px">×</button></li></sc-for></ul></sc-if>
           </div>
           <sc-if value="{{ hasSaveError }}" hint-placeholder-val="{{ false }}"><p role="alert" style="margin:0;padding:10px 12px;background:var(--status-error-soft);font-size:14px"><strong style="color:var(--status-error)">Not saved.</strong> {{ saveError }}</p></sc-if>
-          <button type="submit" disabled="{{ saving }}" aria-busy="{{ saving }}" style="height:44px;padding:0 20px;background:var(--action-primary);color:var(--text-on-action);border:0;border-radius:2px;font-size:14px;font-weight:500;cursor:pointer">{{ saveBtnLabel }}</button>
-          <sc-if value="{{ isSavedItem }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ deleteCurrent }}" style="height:44px;padding:0 16px;background:var(--surface-panel);color:var(--status-error);border:1px solid var(--status-error);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer">Delete extract</button></sc-if>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;align-items:center"><sc-if value="{{ isSavedItem }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ deleteCurrent }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;background:var(--surface-panel);color:var(--status-error);border:1px solid var(--status-error);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer"><i class="ph ph-trash" aria-hidden="true" style="font-size:18px"></i>Delete extract</button></sc-if><button type="submit" disabled="{{ saving }}" aria-busy="{{ saving }}" style="position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;background:var(--action-primary);color:var(--text-on-action);border:0;border-radius:2px;font-size:14px;font-weight:500;cursor:pointer"><i class="ph ph-floppy-disk" aria-hidden="true" style="font-size:18px"></i>{{ saveBtnLabel }}<sc-if value="{{ saving }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="{{ skelSweep }}"></span></sc-if></button></div>
         </form>
       </div>
     </div>
@@ -1278,7 +1301,7 @@ body{zoom:var(--ml-zoom,1)}
       <div role="dialog" aria-modal="true" aria-labelledby="flt-h" data-trap="on" onClick="{{ stop }}" style="width:100%;max-height:85vh;overflow:auto;background:var(--surface-raised);border-radius:4px 4px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:16px;box-shadow:var(--elevation-overlay)">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
           <h2 id="flt-h" style="margin:0;font-size:20px;line-height:28px;font-weight:600">Filters</h2>
-          <button type="button" id="filters-close" onClick="{{ closeFilters }}" style="height:44px;padding:0 12px;background:transparent;border:1px solid var(--border-control);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer">Show results</button>
+          <button type="button" id="filters-close" onClick="{{ closeFilters }}" aria-label="Close filters" style="width:44px;height:44px;flex:none;display:grid;place-items:center;background:transparent;border:0;border-radius:4px;cursor:pointer;color:var(--text-secondary)" style-hover="background:var(--surface-hover);color:var(--text-primary)"><i class="ph ph-x" aria-hidden="true" style="font-size:20px"></i></button>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px">
           <label for="f-cat-m" style="font-size:14px;font-weight:500">Category</label>
@@ -1292,6 +1315,7 @@ body{zoom:var(--ml-zoom,1)}
           <sc-for list="{{ tagOptions }}" as="t"><label style="display:flex;align-items:center;gap:10px;min-height:44px;font-size:14px;cursor:pointer"><input type="checkbox" checked="{{ t.checked }}" onChange="{{ t.toggle }}" style="width:18px;height:18px;margin:0;accent-color:var(--action-primary)">{{ t.label }}</label></sc-for>
           <sc-if value="{{ noTagOpts }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:13px;color:var(--text-secondary)">No tags yet. Add them when you save an extract.</p></sc-if>
         </fieldset>
+        <div style="display:flex;justify-content:flex-end"><button type="button" onClick="{{ closeFilters }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 18px;background:var(--action-primary);color:var(--text-on-action);border:0;border-radius:4px;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:var(--action-primary-hover)"><i class="ph ph-check" aria-hidden="true" style="font-size:18px"></i>Show results</button></div>
       </div>
     </div>
   </sc-if>
@@ -1299,16 +1323,15 @@ body{zoom:var(--ml-zoom,1)}
   <sc-if value="{{ dialog }}" hint-placeholder-val="{{ false }}">
     <div id="dlg-layer" data-dlg-layer="" onClick="{{ dlgScrim }}" style="position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:16px;background:rgba(8,14,26,0.46);backdrop-filter:blur(6px) saturate(0.9);-webkit-backdrop-filter:blur(6px) saturate(0.9);animation:mlScrimIn 240ms ease both">
       <div data-dlg-card="" style="width:100%;max-width:420px;animation:mlDlgIn 590ms linear(0, 0.094 5.6%, 0.274 11.1%, 0.455 16.7%, 0.608 22.2%, 0.726 27.8%, 0.812 33.3%, 0.873 38.9%, 0.916 44.4%, 0.944 50%, 0.976 61.1%, 1 100%) both">
-        <div id="dlg-card" role="{{ dlgRole }}" aria-modal="true" aria-labelledby="dlg-h" aria-describedby="dlg-b" data-trap="on" onClick="{{ stop }}" style="background:var(--surface-raised);color:var(--text-primary);border:1px solid var(--border-divider);border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:16px;box-shadow:0 2px 4px rgba(4,10,24,0.12),0 24px 56px -12px rgba(4,10,24,0.42)">
+        <div id="dlg-card" role="{{ dlgRole }}" aria-modal="true" aria-labelledby="dlg-h" aria-describedby="dlg-b" data-trap="on" onClick="{{ stop }}" style="position:relative;background:var(--surface-raised);color:var(--text-primary);border:1px solid var(--border-divider);border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:16px;box-shadow:0 2px 4px rgba(4,10,24,0.12),0 24px 56px -12px rgba(4,10,24,0.42)">
+          <button type="button" onClick="{{ dlgClose }}" aria-label="Close dialog" style="position:absolute;top:12px;right:12px;width:40px;height:40px;display:grid;place-items:center;background:transparent;border:0;border-radius:4px;cursor:pointer;color:var(--text-secondary)" style-hover="background:var(--surface-hover);color:var(--text-primary)"><i class="ph ph-x" aria-hidden="true" style="font-size:20px"></i></button>
           <span aria-hidden="true" style="{{ dlgChip }}"><i class="ph {{ dlgIcon }}" style="font-size:24px"></i></span>
           <div style="display:flex;flex-direction:column;gap:6px">
             <h2 id="dlg-h" style="margin:0;font-size:20px;line-height:28px;font-weight:600;text-wrap:balance">{{ dlgTitle }}</h2>
             <p id="dlg-b" style="margin:0;font-size:15px;line-height:22px;color:var(--text-secondary);text-wrap:pretty">{{ dlgBody }}</p>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:4px">
-            <button type="button" id="dlg-cancel" onClick="{{ dlgDoCancel }}" style="height:44px;padding:0 16px;display:inline-flex;align-items:center;gap:8px;border-radius:4px;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap;background:var(--surface-panel);color:var(--text-primary);border:1px solid var(--border-strong)" style-hover="background:var(--surface-hover)" style-active="background:var(--border-divider)">{{ dlgCancel }}</button>
-            <sc-if value="{{ hasAlt }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ dlgDoAlt }}" style="height:44px;padding:0 16px;display:inline-flex;align-items:center;gap:8px;border-radius:4px;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap;background:var(--surface-panel);color:var(--text-link);border:1px solid var(--border-strong)" style-hover="background:var(--surface-hover)"><i class="ph {{ dlgAltIcon }}" aria-hidden="true" style="font-size:18px"></i>{{ dlgAlt }}</button></sc-if>
-            <button type="button" onClick="{{ dlgDoConfirm }}" style="{{ dlgConfirmStyle }}" style-hover="filter:brightness(0.94)" style-active="filter:brightness(0.88)"><i class="ph {{ dlgConfirmIcon }}" aria-hidden="true" style="font-size:18px"></i>{{ dlgConfirm }}</button>
+            <sc-for list="{{ dlgButtons }}" as="b" hint-placeholder-count="2"><button type="button" id="{{ b.id }}" onClick="{{ b.onClick }}" style="{{ b.style }}" style-hover="filter:brightness(0.95)" style-active="filter:brightness(0.9)"><sc-if value="{{ b.hasIcon }}"><i class="ph {{ b.icon }}" aria-hidden="true" style="font-size:18px"></i></sc-if>{{ b.label }}</button></sc-for>
           </div>
         </div>
       </div>
@@ -1326,15 +1349,15 @@ body{zoom:var(--ml-zoom,1)}
         <div style="display:grid;place-items:center;background:var(--surface-page);border:1px solid var(--border-divider);padding:12px">
           <div id="crop-area" ref="{{ cropRef }}" tabIndex="0" role="application" aria-label="Crop area" aria-describedby="crop-size" onPointerDown="{{ cropDown }}" onPointerMove="{{ cropMove }}" onPointerUp="{{ cropUp }}" onPointerCancel="{{ cropUp }}" onKeyDown="{{ cropKey }}" style="position:relative;display:inline-block;max-width:100%;touch-action:none;user-select:none;cursor:crosshair;overflow:hidden">
             {{ cropImg }}
-            <div style="{{ cropRect }}"><sc-for list="{{ cropHandles }}" as="hd"><span data-h="{{ hd.k }}" style="{{ hd.style }}"></span></sc-for></div>
+            <div style="{{ cropRect }}"><div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr"><span style="border-right:1px solid rgb(255 255 255 / .75);border-bottom:1px solid rgb(255 255 255 / .75);box-shadow:inset -1px -1px 0 rgb(53 106 230 / .55)"></span><span style="border-right:1px solid rgb(255 255 255 / .75);border-bottom:1px solid rgb(255 255 255 / .75);box-shadow:inset -1px -1px 0 rgb(53 106 230 / .55)"></span><span style="border-bottom:1px solid rgb(255 255 255 / .75);box-shadow:inset 0 -1px 0 rgb(53 106 230 / .55)"></span><span style="border-right:1px solid rgb(255 255 255 / .75);border-bottom:1px solid rgb(255 255 255 / .75);box-shadow:inset -1px -1px 0 rgb(53 106 230 / .55)"></span><span style="border-right:1px solid rgb(255 255 255 / .75);border-bottom:1px solid rgb(255 255 255 / .75);box-shadow:inset -1px -1px 0 rgb(53 106 230 / .55)"></span><span style="border-bottom:1px solid rgb(255 255 255 / .75);box-shadow:inset 0 -1px 0 rgb(53 106 230 / .55)"></span><span style="border-right:1px solid rgb(255 255 255 / .75);box-shadow:inset -1px 0 0 rgb(53 106 230 / .55)"></span><span style="border-right:1px solid rgb(255 255 255 / .75);box-shadow:inset -1px 0 0 rgb(53 106 230 / .55)"></span><span></span></div><sc-for list="{{ cropHandles }}" as="hd"><span data-h="{{ hd.k }}" style="{{ hd.style }}"></span></sc-for></div>
           </div>
         </div>
         <p id="crop-size" role="status" style="margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:500;font-variant-numeric:tabular-nums lining-nums;font-feature-settings:'tnum' 1,'lnum' 1;letter-spacing:0.01em;font-size:13px;color:var(--text-secondary)">{{ cropSize }}</p>
         <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between">
           <button type="button" onClick="{{ cropReset }}" style="height:44px;padding:0 12px;background:none;border:0;font-size:14px;font-weight:500;text-decoration:underline;text-underline-offset:3px;cursor:pointer;color:var(--text-primary)">Select whole image</button>
           <div style="display:flex;flex-wrap:wrap;gap:8px">
-            <button type="button" onClick="{{ cropCancel }}" style="height:44px;padding:0 16px;background:var(--surface-panel);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:var(--surface-hover)">Cancel</button>
-            <button type="button" onClick="{{ cropApply }}" style="height:44px;padding:0 20px;background:var(--action-primary);color:var(--text-on-action);border:0;border-radius:2px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:var(--action-primary-hover)">{{ cropApplyLabel }}</button>
+            <button type="button" onClick="{{ cropCancel }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;background:var(--surface-panel);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:var(--surface-hover)"><i class="ph ph-x" aria-hidden="true" style="font-size:18px"></i>Cancel</button>
+            <button type="button" onClick="{{ cropApply }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;background:var(--action-primary);color:var(--text-on-action);border:0;border-radius:2px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:var(--action-primary-hover)"><i class="ph ph-crop" aria-hidden="true" style="font-size:18px"></i>{{ cropApplyLabel }}</button>
           </div>
         </div>
       </div>
@@ -1355,8 +1378,8 @@ body{zoom:var(--ml-zoom,1)}
         <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;margin-top:4px">
           <a href="#/privacy" onClick="{{ ckPrivacy }}" style="min-height:44px;display:inline-flex;align-items:center;font-size:15px;font-weight:500">Read the privacy policy</a>
           <div style="display:flex;flex-wrap:wrap;gap:8px">
-            <button type="button" onClick="{{ ckDelete }}" style="height:44px;padding:0 16px;background:var(--surface-panel);color:var(--status-error);border:1px solid var(--status-error);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:var(--status-error-soft)">Delete saved data</button>
-            <button type="button" onClick="{{ closeCookies }}" style="height:44px;padding:0 20px;background:var(--action-primary);color:var(--text-on-action);border:0;border-radius:2px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:var(--action-primary-hover)">Done</button>
+            <button type="button" onClick="{{ ckDelete }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;background:var(--surface-panel);color:var(--status-error);border:1px solid var(--status-error);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:var(--status-error-soft)"><i class="ph ph-trash" aria-hidden="true" style="font-size:18px"></i>Delete saved data</button>
+            <button type="button" onClick="{{ closeCookies }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;background:var(--action-primary);color:var(--text-on-action);border:0;border-radius:2px;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:var(--action-primary-hover)"><i class="ph ph-check" aria-hidden="true" style="font-size:18px"></i>Done</button>
           </div>
         </div>
       </div>
@@ -1397,7 +1420,7 @@ const DLG_TONES = {
   warn: { icon: 'ph-warning-circle', bg: 'var(--status-warning-soft)', fg: 'var(--status-warning)', alert: true },
   info: { icon: 'ph-info', bg: 'var(--status-info-soft)', fg: 'var(--status-info)', alert: true },
   save: { icon: 'ph-check-circle', bg: 'var(--status-success-soft)', fg: 'var(--status-success)', alert: false },
-  update: { icon: 'ph-arrows-clockwise', bg: 'var(--status-success-soft)', fg: 'var(--status-success)', alert: false }
+  update: { icon: 'ph-check-circle', bg: 'var(--status-success-soft)', fg: 'var(--status-success)', alert: false }
 };
 const HERO_INK = { '--text-primary': '#FFFFFF', '--text-secondary': '#C3CEE0', '--surface-panel': 'rgba(255,255,255,0.06)', '--surface-hover': 'rgba(255,255,255,0.14)', '--border-strong': '#9AA8BF', '--border-control': '#9AA8BF', '--border-divider': 'rgba(255,255,255,0.22)', '--focus-ring': '#FFFFFF' };
 const SLIDES = [
@@ -1443,7 +1466,17 @@ class Component extends DCLogic {
   mainRef = React.createRef();
 
   componentDidUpdate() {
-    const s = this.state; let t = PAGE_TITLES[s.route] || '';
+    const s = this.state;
+    // own snapshot of the previous render (the runtime doesn't pass prevState)
+    const fp = [s.q, s.catFilter, s.sort, (s.tagFilter || []).join('|')].join('§');
+    if (s.route === 'library' && this._libFp !== undefined && this._libFp !== fp && this._prevRoute === 'library') {
+      const typed = this._libQ !== s.q;
+      clearTimeout(this.libFltT); if (!s.libFiltering) this.setState({ libFiltering: true });
+      this.libFltT = setTimeout(() => this.setState({ libFiltering: false }), typed ? 520 : 420);
+    }
+    // opening the library always reloads it, so the skeleton shows on every visit
+    if ((s.route === 'library' || s.route === 'workspace') && this._prevRoute !== undefined && this._prevRoute !== s.route && !s.libLoading) this.loadLibrary();
+    this._libFp = fp; this._libQ = s.q; this._prevRoute = s.route; let t = PAGE_TITLES[s.route] || '';
     if (s.route === 'design-system' && s.dsTab && s.dsTab !== 'overview') t = ((DS_TABS.find((x) => x[0] === s.dsTab) || [, ''])[1]) + ', Design system';
     const title = t ? t + ' | marklith' : 'marklith: image text to Markdown, in your browser';
     if (document.title !== title) document.title = title;
@@ -1574,7 +1607,7 @@ class Component extends DCLogic {
     const go0 = () => { location.hash = target === 'home' && !SECTIONS.includes(route) ? '#/' : `#/${route}`; this.setState({ route: target, menuOpen: false }); document.body.style.overflow = ''; if (anchor) this.scrollToId(anchor); else { window.scrollTo(0, 0); setTimeout(() => this.mainRef.current && this.mainRef.current.focus({ preventScroll: true }), 0); } };
     const go = () => this.vt(go0);
     if (this.state.route === 'workspace' && target !== 'workspace' && this.state.dirty) {
-      this.openDialog({ tone: 'warn', icon: 'ph-floppy-disk-back', title: 'Leave without saving?', body: 'Your edits are not in the library yet.', cancel: 'Keep editing', alt: 'Save and leave', altIcon: 'ph-floppy-disk', confirm: 'Discard edits', destructive: true, onAlt: () => this.doSave(go), onConfirm: () => { this.setState({ dirty: false }); go(); } });
+      this.openDialog({ tone: 'warn', icon: 'ph-floppy-disk-back', title: 'Leave without saving?', body: 'Your edits are not in the library yet.', cancel: 'Keep editing', alt: 'Save and leave', altIcon: 'ph-floppy-disk', confirm: 'Discard edits', destructive: true, primary: 'alt', onAlt: () => this.doSave(go), onConfirm: () => { this.setState({ dirty: false }); go(); } });
       return;
     }
     go();
@@ -1597,7 +1630,7 @@ class Component extends DCLogic {
   }
   newExtract() {
     const start = () => this.vt(() => { this.clearWorkspace(true); if (this.state.route !== 'workspace') { location.hash = '#/workspace'; this.setState({ route: 'workspace' }); } window.scrollTo(0, 0); this.announce('Ready for new images.'); });
-    if (this.state.dirty) { this.openDialog({ tone: 'warn', icon: 'ph-file-plus', title: 'Start a new extract?', body: 'Your unsaved edits here will be lost.', cancel: 'Keep editing', alt: 'Save first', altIcon: 'ph-floppy-disk', confirm: 'Discard and start new', confirmIcon: 'ph-plus', destructive: true, onAlt: () => this.doSave(start), onConfirm: start }); return; }
+    if (this.state.dirty) { this.openDialog({ tone: 'warn', icon: 'ph-file-plus', title: 'Start a new extract?', body: 'Your unsaved edits here will be lost.', cancel: 'Keep editing', alt: 'Save first', altIcon: 'ph-floppy-disk', confirm: 'Discard and start new', destructive: true, primary: 'alt', onAlt: () => this.doSave(start), onConfirm: start }); return; }
     start();
   }
   dlgShake() { const c = document.getElementById('dlg-card'); if (!c) return; c.classList.remove('ml-shake'); void c.offsetWidth; c.classList.add('ml-shake'); }
@@ -1648,9 +1681,9 @@ class Component extends DCLogic {
         this.patchImage(im.id, { status: 'reading' });
         this.setState({ appendProgress: { img: k + 1, total, label: 'Reading text', stage: 2, value: 0 } });
         try {
-          const res = await this.core.extractText({ canvas: im.canvas, w: im.w, h: im.h }, { lang: this.state.lang, mainOnly: this.state.mainOnly, onProgress: (p) => { if (id !== this.runId) return; const v = Math.round(p.value * 10); if (v !== this.lastAppendV) { this.lastAppendV = v; this.setState({ appendProgress: { ...p, img: k + 1, total } }); } } });
+          const res = await this.core.extractText({ canvas: im.canvas, w: im.w, h: im.h }, { lang: this.state.lang, mainOnly: this.state.mainOnly, deep: false, onProgress: (p) => { if (id !== this.runId) return; const v = Math.round(p.value * 10); if (v !== this.lastAppendV) { this.lastAppendV = v; this.setState({ appendProgress: { ...p, img: k + 1, total } }); } } });
           if (id !== this.runId) return;
-          if (res.text.trim()) { texts.push(res.text); res.lines.forEach((l) => lines.push({ ...l, img: im.id })); low.push(...res.lowWords); if (res.excludedText) this.setState((st) => ({ excluded: [st.excluded, res.excludedText].filter(Boolean).join('\n\n'), excludedCount: st.excludedCount + res.excludedCount })); this.patchImage(im.id, { status: 'done', canvas: null }); }
+          if (res.text.trim()) { texts.push(res.text); res.lines.forEach((l) => lines.push({ ...l, img: im.id })); low.push(...res.lowWords); if (res.excludedText) this.setState((st) => ({ excluded: [st.excluded, res.excludedText].filter(Boolean).join('\n\n'), excludedCount: st.excludedCount + res.excludedCount })); this.patchImage(im.id, { status: 'done' }); }
           else { failed.push(im.name); this.patchImage(im.id, { status: 'empty', error: 'No text found' }); }
         } catch (err) { if (id !== this.runId) return; failed.push(im.name); this.patchImage(im.id, { status: 'failed', error: (err && err.message) || 'Could not be read' }); }
       }
@@ -1659,7 +1692,7 @@ class Component extends DCLogic {
     if (!texts.length) { this.setState({ partialNote: `None of the ${total} new images had readable text: ${failed.join(', ')}.` }); this.announce('No text found in the new images.'); return; }
     const add = texts.join('\n\n');
     this.setState((st) => { const lowU = [...new Set([...st.lowWords, ...low])]; return { text: st.text.trim() ? `${st.text.replace(/\s+$/, '')}\n\n${add}` : add, original: st.original.trim() ? `${st.original.replace(/\s+$/, '')}\n\n${add}` : add, lines: [...st.lines, ...lines], lowWords: lowU, dirty: true, partialNote: failed.length ? `${failed.length} of ${total} new images had no readable text: ${failed.join(', ')}.` : '', save: st.save.status === 'saved' ? { ...st.save, status: 'edited' } : st.save }; });
-    this.announce(`Added text from ${texts.length} ${texts.length === 1 ? 'image' : 'images'} to the end. ${this.state.save.editingId ? 'Save changes to keep it.' : ''}`);
+    this.announce(`Added text from ${texts.length} ${texts.length === 1 ? 'image' : 'images'} to the end. ${this.state.save.editingId ? 'Save changes to keep it.' : ''}`); this.deepScan(ids, id);
   }
   async cancelAppend() {
     this.runId++; await this.core.cancelOcr();
@@ -1721,12 +1754,21 @@ class Component extends DCLogic {
   patchImage(id, patch) { this.setState((st) => ({ images: st.images.map((x) => (x.id === id ? { ...x, ...patch } : x)) })); }
   revokeImages() { (this.state.images || []).forEach((x) => x.url && URL.revokeObjectURL(x.url)); }
   removeImageAt(id) {
-    const s = this.state; const im = s.images.find((x) => x.id === id); if (!im) return;
-    if (s.images.length === 1) { this.clearWorkspace(false); return; }
-    im.url && URL.revokeObjectURL(im.url);
+    const s = this.state; const idx = s.images.findIndex((x) => x.id === id); if (idx < 0) return; const im = s.images[idx];
+    // quick delete: no dialog, the toast offers Undo; object URLs stay alive so Undo can bring the preview back
+    const snap = { images: s.images, activeImg: s.activeImg, phase: s.phase, text: s.text, original: s.original, lines: s.lines, dirty: s.dirty, save: s.save };
+    const undo = () => { this.setState(snap); this.announce(`Restored ${im.name}.`); this.focusLater(`up-${id}`); };
     const images = s.images.filter((x) => x.id !== id);
-    this.setState({ images, activeImg: Math.min(s.activeImg, images.length - 1) });
-    this.announce(`Removed ${im.name}.`);
+    const patch = { images, activeImg: Math.max(0, Math.min(idx > s.activeImg ? s.activeImg : s.activeImg - (idx < s.activeImg ? 1 : 0), images.length - 1)) };
+    if (s.phase === 'review') {
+      const own = s.lines.filter((l) => l.img === id);
+      const strip = (t) => { const L = (t || '').split('\n'); own.forEach((l) => { const k = L.findIndex((x) => x.trim() === String(l.text).trim()); if (k >= 0) L.splice(k, 1); }); return L.join('\n').replace(/\n{3,}/g, '\n\n').trim(); };
+      Object.assign(patch, { text: strip(s.text), original: strip(s.original), lines: s.lines.filter((l) => l.img !== id), dirty: true, activeLine: -1, save: s.save.status === 'saved' ? { ...s.save, status: 'edited' } : s.save });
+    }
+    if (!images.length) Object.assign(patch, { phase: 'empty', text: '', original: '', lines: [], activeLine: -1 });
+    this.setState(patch);
+    this.announce(s.phase === 'review' ? `Removed ${im.name} and its text.` : `Removed ${im.name}.`, undo);
+    if (!images.length) this.focusLater('choose-btn');
   }
   moveImage(id, dir) {
     const imgs = [...this.state.images]; const i = imgs.findIndex((x) => x.id === id); const j = i + dir;
@@ -1746,7 +1788,7 @@ class Component extends DCLogic {
     if (s.images.some((x) => x.status === 'compressing')) { this.announce('Still compressing images. Try again in a moment.'); return; }
     const queue = s.images.filter((x) => x.status !== 'failed' || x.blob);
     if (!queue.length) return;
-    this.runId = (this.runId || 0) + 1; const id = this.runId;
+    this.runId = (this.runId || 0) + 1; const id = this.runId; this.caretPos = null;
     const total = queue.length;
     this.setState({ phase: 'extracting', progress: { stage: 1, label: 'Preparing images', value: 0.05, img: 1, total }, failReason: '', failDetail: '' });
     let lastPct = -1;
@@ -1758,7 +1800,7 @@ class Component extends DCLogic {
         this.setState({ activeImg: this.state.images.findIndex((x) => x.id === im.id) });
         this.patchImage(im.id, { status: 'reading', error: '' });
         try {
-          const res = await this.core.extractText(im.canvas ? { canvas: im.canvas, w: im.w, h: im.h } : im.blob, { lang: s.lang, mainOnly: s.mainOnly, onProgress: (p) => {
+          const res = await this.core.extractText(im.canvas ? { canvas: im.canvas, w: im.w, h: im.h } : im.blob, { lang: s.lang, mainOnly: s.mainOnly, deep: false, onProgress: (p) => {
             if (id !== this.runId) return;
             const pct = Math.round(p.value * 100);
             if (p.stage === this.state.progress.stage && Math.abs(pct - lastPct) < 10 && pct !== 100) return;
@@ -1782,11 +1824,68 @@ class Component extends DCLogic {
       const src = total > 1 ? `Text extracted from ${texts.length} images.` : 'Text extracted.';
       this.announce(lowU.length ? `${src} ${lowU.length === 1 ? '1 word' : `${lowU.length} words`} to check.` : `${src} Review it against the image.`);
       this.focusLater('extract-text');
+      this.deepScan(queue.map((x) => x.id), id);
     } catch (err) {
       if (id !== this.runId) return;
       this.setState({ phase: 'failed', failReason: 'Extraction failed', failDetail: (err && err.message) || String(err) });
       this.focusLater('retry-btn');
     }
+  }
+  async deepScan(ids, id) {
+    // second, slower look runs after the text is already in the editor; anything new is appended at the end
+    const imgs = this.state.images.filter((x) => ids.includes(x.id) && x.canvas && x.status === 'done');
+    if (!imgs.length || !this.core.extractMore) return;
+    let added = 0;
+    this.setState({ scanning: { img: 1, total: imgs.length } });
+    for (let k = 0; k < imgs.length; k++) {
+      if (id !== this.runId || this.state.phase !== 'review') break;
+      const im = imgs[k];
+      if (!this.state.images.some((x) => x.id === im.id)) continue;
+      this.setState({ scanning: { img: k + 1, total: imgs.length } });
+      try {
+        const known = this.state.lines.filter((l) => l.img === im.id);
+        const res = await this.core.extractMore({ canvas: im.canvas, w: im.w, h: im.h }, { lang: this.state.lang, mainOnly: this.state.mainOnly, known });
+        if (id !== this.runId || this.state.phase !== 'review' || !this.state.images.some((x) => x.id === im.id)) break;
+        if (res.text.trim()) {
+          added += res.lines.length;
+          this.setState((st) => ({ text: `${st.text.replace(/\s+$/, '')}\n\n${res.text}`, original: `${st.original.replace(/\s+$/, '')}\n\n${res.text}`, lines: [...st.lines, ...res.lines.map((l) => ({ ...l, img: im.id }))], dirty: true }));
+        }
+      } catch (e) { break; }
+    }
+    if (id !== this.runId) return;
+    this.setState({ scanning: null });
+    if (added) this.announce(`Found ${added} more ${added === 1 ? 'line' : 'lines'} and added ${added === 1 ? 'it' : 'them'} to the end.`);
+  }
+  stopScan() { this.runId = (this.runId || 0) + 1; this.setState({ scanning: null }); this.core.cancelOcr(); this.announce('Scan stopped. The text so far is kept.'); }
+  async readArea(rect) {
+    const s = this.state; const im = s.images[s.activeImg]; if (!im || !this.core.readRegion) return;
+    this.setState({ pickBusy: true });
+    try {
+      const res = await this.core.readRegion(im.canvas ? { canvas: im.canvas, w: im.w, h: im.h } : im.blob, rect, { lang: s.lang });
+      if (!res.text.trim()) { this.announce('No text found in that area. Try drawing a slightly larger box.'); return; }
+      const st = this.state;
+      const snap = { text: st.text, original: st.original, lines: st.lines, dirty: st.dirty, save: st.save };
+      // insert at the caret the user last placed in the editor (on its own line); no caret yet = end of text
+      const t = st.text; const pos = this.caretPos != null ? Math.min(this.caretPos, t.length) : t.length; const atEnd = pos >= t.replace(/\s+$/, '').length;
+      let before = t.slice(0, pos), after = t.slice(pos);
+      if (!atEnd) { const nl = after.indexOf('\n'); const cut = nl < 0 ? after.length : nl; if (cut && after.slice(0, cut).trim()) { before += after.slice(0, cut); after = after.slice(cut); } }
+      else { before = t.replace(/\s+$/, ''); after = ''; }
+      const pre = !before ? '' : before.endsWith('\n\n') ? '' : before.endsWith('\n') ? '\n' : '\n\n';
+      const post = !after ? '' : after.startsWith('\n\n') ? '' : after.startsWith('\n') ? '\n' : '\n\n';
+      const text = before + pre + res.text + post + after;
+      const caret = (before + pre + res.text).length;
+      const lineIdx = before.split('\n').filter((l) => l.trim()).length;
+      const added = res.lines.map((l) => ({ ...l, img: im.id }));
+      const lines = [...st.lines.slice(0, lineIdx), ...added, ...st.lines.slice(lineIdx)];
+      const original = st.original === st.text ? text : (st.original.trim() ? `${st.original.replace(/\s+$/, '')}\n\n${res.text}` : res.text);
+      this.setState({ text, original, lines, dirty: true, activeLine: -1, save: st.save.status === 'saved' ? { ...st.save, status: 'edited' } : st.save });
+      this.caretPos = caret;
+      setTimeout(() => { const el = this.editorRef && this.editorRef.current; if (!el) return; try { el.setSelectionRange(caret, caret); } catch (er) {}
+        const lh = parseFloat(getComputedStyle(el).lineHeight) || 24; const row = (before + pre).split('\n').length - 1; el.scrollTop = Math.max(0, row * lh - el.clientHeight / 3); }, 30);
+      const n = res.lines.length;
+      this.announce(`Added ${n} ${n === 1 ? 'line' : 'lines'} ${atEnd ? 'at the end' : 'at your cursor'}.`, () => { this.setState(snap); this.announce('Removed the text from that area.'); });
+    } catch (e) { this.announce('That area could not be read. Try again.'); }
+    finally { this.setState({ pickBusy: false, pickRect: null }); }
   }
   async cancelExtract() { this.runId++; await this.core.cancelOcr(); this.setState((st) => ({ phase: 'selected', images: st.images.map((x) => (x.status === 'reading' ? { ...x, status: 'ready' } : x)) })); this.announce('Extraction cancelled. Your image is still here.'); this.focusLater('extract-btn'); }
 
@@ -1837,12 +1936,14 @@ class Component extends DCLogic {
     const now = Date.now(); const id = s.save.editingId || `x${now.toString(36)}${Math.random().toString(36).slice(2, 6)}`;
     const item = { id, title: s.save.title.trim(), category: s.save.category.trim(), tags: s.save.tags, text: s.text, original: s.original, format: s.format, lines: s.lines, lowWords: s.lowWords, images: s.images.filter((x) => x.blob).map((x) => ({ id: x.id, name: x.name, blob: x.blob, w: x.w, h: x.h, before: x.before, after: x.after })), createdAt: s.save.createdAt || now, updatedAt: now };
     try {
+      const t0 = performance.now();
       await this.core.store.put(item);
+      const wait = 700 - (performance.now() - t0); if (wait > 0) await new Promise((r) => setTimeout(r, wait)); // let the sweep read as progress
       this.setState((st) => ({ dirty: false, saveDialog: false, save: { ...st.save, status: 'saved', savedAt: now, editingId: id, createdAt: item.createdAt } }));
       this.announce(wasEditing ? `Updated "${item.title}".` : `Saved "${item.title}" to your library.`);
       this.loadLibrary();
       if (typeof after === 'function') after();
-      else setTimeout(() => this.openDialog({ tone: wasEditing ? 'update' : 'save', title: wasEditing ? 'Changes saved' : 'Saved to your library', body: wasEditing ? `"${item.title}" is up to date in your library.` : `"${item.title}" is now in your library.`, cancel: 'Keep editing', alt: 'New extract', altIcon: 'ph-plus', confirm: 'Open library', confirmIcon: 'ph-books', onAlt: () => this.clearWorkspace(true), onConfirm: () => this.navigate('library') }), 60);
+      else setTimeout(() => this.openDialog({ tone: wasEditing ? 'update' : 'save', title: wasEditing ? 'Changes saved' : 'Saved to your library', body: wasEditing ? `"${item.title}" is up to date in your library.` : `"${item.title}" is now in your library.`, cancel: 'Close', onCancel: () => this.navigate('library'), confirm: 'Keep editing', confirmIcon: 'ph-pencil-simple' }), 60);
     } catch (e) { this.setSave({ status: 'error', error: e.message || 'Saving failed.' }); }
   }
   async loadLibrary() {
@@ -1859,7 +1960,7 @@ class Component extends DCLogic {
       this.setState({ phase: 'review', images, activeImg: 0, partialNote: '', text: it.text, original: it.original, lines: it.lines || [], lowWords: it.lowWords || [], lowIdx: 0, format: it.format || 'markdown', dirty: false, mobileTab: 'text', activeLine: -1, copyFallback: false, save: { ...blankSave(), title: it.title, category: it.category, tags: it.tags || [], status: 'saved', savedAt: it.updatedAt, editingId: it.id, createdAt: it.createdAt } });
       location.hash = '#/workspace'; this.setState({ route: 'workspace' }); window.scrollTo(0, 0); this.focusLater('extract-text');
     };
-    if (this.state.dirty) { this.openDialog({ tone: 'warn', icon: 'ph-folder-open', title: 'Open another extract?', body: 'Your unsaved edits here will be lost.', cancel: 'Keep editing', confirm: 'Discard and open', confirmIcon: 'ph-folder-open', destructive: true, onConfirm: go }); return; }
+    if (this.state.dirty) { this.openDialog({ tone: 'warn', icon: 'ph-folder-open', title: 'Open another extract?', body: 'Your unsaved edits here will be lost.', cancel: 'Keep editing', confirm: 'Discard and open', destructive: true, onConfirm: go }); return; }
     go();
   }
   deleteCurrent() {
@@ -1904,7 +2005,7 @@ class Component extends DCLogic {
     const q = s.q.trim().toLowerCase();
     const cats = [...new Set(s.items.map((x) => x.category).filter(Boolean))].sort();
     const allTags = [...new Set(s.items.flatMap((x) => x.tags || []))].sort();
-    let list = s.items.filter((x) => (!q || [x.title, x.text, x.category, ...(x.tags || [])].join(' ').toLowerCase().includes(q)) && (!s.catFilter || x.category === s.catFilter) && s.tagFilter.every((t) => (x.tags || []).includes(t)));
+    const libBusy = !!(s.libLoading || s.libFiltering); let list = s.items.filter((x) => (!q || [x.title, x.text, x.category, ...(x.tags || [])].join(' ').toLowerCase().includes(q)) && (!s.catFilter || x.category === s.catFilter) && s.tagFilter.every((t) => (x.tags || []).includes(t)));
     list = list.sort((a, b) => s.sort === 'oldest' ? a.updatedAt - b.updatedAt : s.sort === 'title' ? a.title.localeCompare(b.title) : b.updatedAt - a.updatedAt);
     const activeFilters = [...(s.catFilter ? [{ label: `Category: ${s.catFilter}`, aria: `Remove filter category ${s.catFilter}`, remove: () => this.setState({ catFilter: '' }) }] : []), ...s.tagFilter.map((t) => ({ label: `#${t}`, aria: `Remove filter tag ${t}`, remove: () => this.setState((st) => ({ tagFilter: st.tagFilter.filter((x) => x !== t) })) }))];
     const navItems = [['workspace', 'Workspace'], ['library', 'Library'], ['settings', 'Settings'], ['help', 'Help and privacy']].map(([r, label], i) => ({ label, href: r === 'workspace' ? '#/' : `#/${r}`, current: s.route === r ? 'page' : undefined, id: i === 0 ? 'menu-first' : undefined, style: { minHeight: '44px', display: 'flex', alignItems: 'center', padding: '0 12px', color: 'var(--text-primary)', textDecoration: 'none', fontSize: '15px', fontWeight: s.route === r ? 600 : 500, background: s.route === r ? 'var(--surface-selected)' : 'transparent', boxShadow: s.route === r ? 'inset 2px 0 0 var(--border-strong)' : 'none' }, go: (e) => { e.preventDefault(); this.navigate(r); } }));
@@ -2146,8 +2247,8 @@ class Component extends DCLogic {
       dismissExcluded: () => this.setState({ excluded: '', excludedCount: 0 }),
       ...(() => { const cr = s.crop; if (!cr) return { cropOpen: false }; const r = cr.r; const hs = [['nw', 0, 0], ['ne', 1, 0], ['sw', 0, 1], ['se', 1, 1]];
         return { cropOpen: true, cropRef: this.cropRef, cropName: cr.name, cropImg: React.createElement('img', { src: cr.url, alt: 'Image to crop: ' + cr.name, draggable: false, style: { display: 'block', maxWidth: '100%', maxHeight: '60vh', userSelect: 'none', pointerEvents: 'none' } }),
-          cropRect: { position: 'absolute', left: (r.x * 100) + '%', top: (r.y * 100) + '%', width: (r.w * 100) + '%', height: (r.h * 100) + '%', boxShadow: '0 0 0 9999px rgb(23 36 58 / .55)', outline: '2px solid #FFFFFF', cursor: 'move' },
-          cropHandles: hs.map(([k, hx, hy]) => ({ k, style: { position: 'absolute', left: 'calc(' + (hx * 100) + '% - 11px)', top: 'calc(' + (hy * 100) + '% - 11px)', width: '22px', height: '22px', background: '#FFFFFF', border: '2px solid #17243A', cursor: (k === 'nw' || k === 'se') ? 'nwse-resize' : 'nesw-resize', touchAction: 'none' } })),
+          cropRect: { position: 'absolute', left: (r.x * 100) + '%', top: (r.y * 100) + '%', width: (r.w * 100) + '%', height: (r.h * 100) + '%', boxShadow: '0 0 0 9999px rgb(23 36 58 / .55)', outline: '2px solid var(--action-primary)', outlineOffset: '-2px', background: 'rgb(53 106 230 / .08)', cursor: 'move' },
+          cropHandles: hs.map(([k, hx, hy]) => ({ k, style: { position: 'absolute', left: 'calc(' + (hx * 100) + '% - ' + (hx * 22) + 'px)', top: 'calc(' + (hy * 100) + '% - ' + (hy * 22) + 'px)', width: '22px', height: '22px', background: 'var(--action-primary)', border: '2px solid #FFFFFF', borderRadius: '2px', boxShadow: '0 1px 3px rgb(4 10 24 / .35)', cursor: (k === 'nw' || k === 'se') ? 'nwse-resize' : 'nesw-resize', touchAction: 'none' } })),
           cropSize: Math.round(r.w * 100) + '% by ' + Math.round(r.h * 100) + '% of the image',
           cropDown: (e) => this.cropPointer(e, 'down'), cropMove: (e) => this.cropPointer(e, 'move'), cropUp: (e) => this.cropPointer(e, 'up'), cropKey: (e) => this.cropKey(e),
           cropReset: () => this.setState({ crop: { ...cr, r: { x: 0, y: 0, w: 1, h: 1 } } }), cropCancel: () => this.closeCrop(), cropApply: () => this.applyCrop(), cropApplyLabel: s.phase === 'review' ? 'Crop and read again' : 'Apply crop' }; })(),
@@ -2158,20 +2259,32 @@ class Component extends DCLogic {
       appendPct: s.appendProgress && s.appendProgress.total ? Math.round(((Math.max(1, s.appendProgress.img) - 1) + (s.appendProgress.stage === 2 ? s.appendProgress.value || 0 : 0)) / s.appendProgress.total * 100) : 0,
       appendBar: { height: '100%', background: 'var(--border-strong)', transformOrigin: 'left', transform: `scaleX(${s.appendProgress && s.appendProgress.total ? Math.max(0.03, (((Math.max(1, s.appendProgress.img) - 1) + (s.appendProgress.stage === 2 ? s.appendProgress.value || 0 : 0)) / s.appendProgress.total)) : 0})`, transition: 'transform 160ms linear' },
       batchNote: this.core ? `Up to ${this.core.LIMITS.maxFiles} images per batch, ${this.core.LIMITS.maxTotal} per extract.` : '', addMore: () => { this.replacing = false; this.fileRef.current && this.fileRef.current.click(); },
-      thumbs: s.images.map((im, i) => ({ img: im.url ? React.createElement('img', { src: im.url, alt: '', style: { width: '100%', height: '100%', objectFit: 'cover' } }) : null, id: im.id, name: im.name, pos: `${i + 1}`, upId: `up-${im.id}`, downId: `down-${im.id}`, noUp: i === 0, noDown: i === s.images.length - 1, canRemove: s.phase === 'selected', current: i === s.activeImg ? 'true' : 'false', select: () => this.setState({ activeImg: i }), up: () => this.moveImage(im.id, -1), down: () => this.moveImage(im.id, 1), remove: () => this.removeImageAt(im.id), removeLabel: `Remove ${im.name}`, upLabel: `Move ${im.name} up`, downLabel: `Move ${im.name} down`, selectLabel: `Show image ${i + 1}, ${im.name}`, url: im.url, hasUrl: !!im.url, sizeText: im.after ? `${this.core.formatBytes(im.before)} to ${this.core.formatBytes(im.after)}` : 'Compressing', statusText: { compressing: 'Compressing', ready: im.cropped ? 'Cropped, ready' : 'Ready', reading: 'Reading text', done: 'Read', empty: 'No text found', failed: im.error || 'Could not be read' }[im.status] || '', isProblem: im.status === 'failed' || im.status === 'empty', isReading: im.status === 'reading', isDone: im.status === 'done', isQueued: s.phase === 'extracting' && im.status === 'ready',
+      thumbs: s.images.map((im, i) => ({ img: im.url ? React.createElement('img', { src: im.url, alt: '', style: { width: '100%', height: '100%', objectFit: 'cover' } }) : null, id: im.id, name: im.name, pos: `${i + 1}`, upId: `up-${im.id}`, downId: `down-${im.id}`, noUp: i === 0, noDown: i === s.images.length - 1, canRemove: (s.phase === 'selected' || s.phase === 'review') && !s.appending, current: i === s.activeImg ? 'true' : 'false', select: () => this.setState({ activeImg: i }), up: () => this.moveImage(im.id, -1), down: () => this.moveImage(im.id, 1), remove: () => this.removeImageAt(im.id), removeLabel: `Remove ${im.name}`, upLabel: `Move ${im.name} up`, downLabel: `Move ${im.name} down`, selectLabel: `Show image ${i + 1}, ${im.name}`, url: im.url, hasUrl: !!im.url, sizeText: im.after ? `${this.core.formatBytes(im.before)} to ${this.core.formatBytes(im.after)}` : 'Compressing', statusText: { compressing: 'Compressing', ready: im.cropped ? 'Cropped, ready' : 'Ready', reading: 'Reading text', done: 'Read', empty: 'No text found', failed: im.error || 'Could not be read' }[im.status] || '', isProblem: im.status === 'failed' || im.status === 'empty', isReading: im.status === 'reading', isDone: im.status === 'done', isQueued: s.phase === 'extracting' && im.status === 'ready',
         statusStyle: { fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: im.status === 'reading' || im.status === 'done' ? 500 : 400, color: im.status === 'done' ? 'var(--status-success)' : im.status === 'reading' ? 'var(--status-info)' : (im.status === 'failed' || im.status === 'empty') ? 'var(--status-error)' : 'var(--text-secondary)' },
         statusIcon: { done: 'ph-check-circle', reading: 'ph-circle-notch', failed: 'ph-warning-circle', empty: 'ph-warning-circle', compressing: 'ph-hourglass', ready: s.phase === 'extracting' ? 'ph-clock' : 'ph-circle' }[im.status] || 'ph-circle',
         iconStyle: { fontSize: '14px', animation: im.status === 'reading' ? 'mlSpin 1s linear infinite' : 'none' },
         style: { display: 'flex', alignItems: 'center', gap: '10px', padding: '8px', border: i === s.activeImg ? '2px solid var(--border-strong)' : '1px solid var(--border-divider)', background: im.status === 'reading' ? 'var(--status-info-soft)' : im.status === 'done' ? 'var(--status-success-soft)' : (im.status === 'failed' || im.status === 'empty') ? 'var(--status-error-soft)' : i === s.activeImg ? 'var(--surface-selected)' : 'var(--surface-panel)', margin: i === s.activeImg ? 0 : '1px', transition: 'background-color 240ms ease' } })),
       savedBytes: (() => { const b = s.images.reduce((a, x) => a + (x.before || 0), 0), a2 = s.images.reduce((a, x) => a + (x.after || 0), 0); return this.core && a2 ? `${this.core.formatBytes(b)} total, ${this.core.formatBytes(a2)} after compression` : ''; })(),
       partialNote: s.partialNote, hasPartial: !!s.partialNote,
+      canPick: s.phase === 'review' && !!(s.images[s.activeImg] && (s.images[s.activeImg].canvas || s.images[s.activeImg].blob)),
+      pickOn: !!s.pick && s.phase === 'review', pickOff: !(s.pick && s.phase === 'review'),
+      pickHint: s.pick ? (s.pickBusy ? 'Reading the selected area.' : 'Drag a box over any text in the image. It is added where your cursor is in the editor, or at the end if you haven\'t placed one.') : 'Missing something? Select it in the image to read just that part.',
+      togglePick: () => this.setState({ pick: !s.pick, pickRect: null }),
+      hasPickRect: !!s.pickRect,
+      pickRectStyle: s.pickRect ? { position: 'absolute', left: (s.pickRect.x * 100) + '%', top: (s.pickRect.y * 100) + '%', width: (s.pickRect.w * 100) + '%', height: (s.pickRect.h * 100) + '%', border: '2px solid var(--action-primary)', background: 'rgb(53 106 230 / .18)', boxShadow: '0 0 0 9999px rgb(23 36 58 / .25)', pointerEvents: 'none' } : {},
+      pickBusy: !!s.pickBusy,
+      pickDown: (e) => { if (s.pickBusy) return; const r = e.currentTarget.getBoundingClientRect(); const x = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), y = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height)); this.pickStart = { x, y }; try { e.currentTarget.setPointerCapture(e.pointerId); } catch (er) {} e.preventDefault(); this.setState({ pickRect: { x, y, w: 0, h: 0 } }); },
+      pickMove: (e) => { const st = this.pickStart; if (!st) return; const r = e.currentTarget.getBoundingClientRect(); const x = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), y = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height)); this.setState({ pickRect: { x: Math.min(st.x, x), y: Math.min(st.y, y), w: Math.abs(x - st.x), h: Math.abs(y - st.y) } }); },
+      pickUp: () => { const st = this.pickStart; this.pickStart = null; const pr = this.state.pickRect; if (!st || !pr) return; if (pr.w < 0.02 || pr.h < 0.01) { this.setState({ pickRect: null }); return; } this.readArea(pr); },
+      pickCancel: () => { this.pickStart = null; if (!this.state.pickBusy) this.setState({ pickRect: null }); },
+      isScanning: !!s.scanning && s.phase === 'review', scanText: s.scanning ? (s.scanning.total > 1 ? `Scanning for more text, image ${s.scanning.img} of ${s.scanning.total}. New lines are added to the end.` : 'Scanning for more text. New lines are added to the end.') : '', stopScan: () => this.stopScan(),
       chooseFile: () => this.fileRef.current && this.fileRef.current.click(),
       onFile: (e) => { const fs = e.target.files ? [...e.target.files] : []; e.target.value = ''; if (fs.length) this.pickFiles(fs); },
       dropStyle: { border: s.dragOver ? '2px solid var(--border-strong)' : s.uploadError ? '2px solid var(--status-error)' : '1px dashed var(--border-control)', background: s.dragOver ? 'var(--surface-selected)' : 'var(--surface-panel)', padding: s.dragOver || s.uploadError ? '31px 23px' : '32px 24px', transition: 'background-color 120ms' },
       dropLabel: s.dragOver ? 'Release to add the images' : 'Drop images here, paste them, or',
       onDragOver: (e) => { e.preventDefault(); if (!s.dragOver) this.setState({ dragOver: true }); }, onDragLeave: (e) => { if (!e.currentTarget.contains(e.relatedTarget)) this.setState({ dragOver: false }); },
       onDrop: (e) => { e.preventDefault(); const fs = e.dataTransfer.files ? [...e.dataTransfer.files] : []; if (fs.length) this.pickFiles(fs); else this.setState({ dragOver: false }); },
-      recent: s.items.slice().sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 3).map((it) => ({ title: it.title, meta: [it.category || 'No category', fmtDate(it.updatedAt)].join(' \u00b7 '), open: (e) => { e.preventDefault(); this.openItem(it); } })), hasRecent: s.items.length > 0 && s.phase === 'empty',
+      recent: s.items.slice().sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 3).map((it) => ({ title: it.title, meta: [it.category || 'No category', fmtDate(it.updatedAt)].join(' \u00b7 '), open: (e) => { e.preventDefault(); this.openItem(it); } })), hasRecent: (s.items.length > 0 || s.libLoading) && s.phase === 'empty', recentLoading: !!s.libLoading, recentReady: !s.libLoading,
       replaceImage: () => { this.replacing = true; this.fileRef.current && this.fileRef.current.click(); }, replaceLabel: s.images.length > 1 ? 'Replace images' : 'Replace image', removeImage: () => this.clearWorkspace(false),
       formats, formatHint: { markdown: 'Headings by level, nested and numbered lists, code blocks and tables, as Markdown.', outline: 'Each heading becomes a bullet; everything under it nests one level deeper.', prompt: 'Plain text that keeps the structure: headings as lines, lists with their markers and indents, no Markdown symbols.' }[s.format],
       lang: s.lang, setLang: (e) => this.setState({ lang: e.target.value }),
@@ -2182,7 +2295,7 @@ class Component extends DCLogic {
       highlight: hl, hasHighlight: !!hl && showPanel('image'),
       text: s.text, editorRef: this.editorRef,
       onText: (e) => { const v = e.target.value; this.setState((st) => ({ text: v, dirty: true, save: st.save.status === 'saved' ? { ...st.save, status: 'edited' } : st.save })); },
-      onCaret: () => { const l = this.caretLine(); if (l === s.activeLine) return; const ln = s.lines[l]; const idx = ln && ln.img ? s.images.findIndex((x) => x.id === ln.img) : -1; this.setState(idx >= 0 ? { activeLine: l, activeImg: idx } : { activeLine: l }); },
+      onCaret: () => { const ed = this.editorRef.current; if (ed) this.caretPos = ed.selectionEnd; const l = this.caretLine(); if (l === s.activeLine) return; const ln = s.lines[l]; const idx = ln && ln.img ? s.images.findIndex((x) => x.id === ln.img) : -1; this.setState(idx >= 0 ? { activeLine: l, activeImg: idx } : { activeLine: l }); },
       lowCount: s.lowWords.length, hasLow: s.lowWords.length > 0, lowLabel: s.lowWords.length === 1 ? '1 word to check' : `${s.lowWords.length} words to check`, nextLow: () => this.nextLowWord(),
       changed: s.text !== s.original, resetText: () => this.openDialog({ tone: 'warn', icon: 'ph-arrow-counter-clockwise', title: 'Reset to the extracted text?', body: 'Your edits to the text are replaced with what the engine read.', cancel: 'Keep my edits', confirm: 'Reset text', confirmIcon: 'ph-arrow-counter-clockwise', destructive: true, onConfirm: () => this.setState({ text: s.original }) }),
       blocks, hasBlocks: blocks.length > 0,
@@ -2206,9 +2319,9 @@ class Component extends DCLogic {
       saveDialog: s.saveDialog && !isMd, openSave: () => { this.dialogOpener = document.activeElement; this.setState({ saveDialog: true }); this.focusLater('save-title'); }, closeSave: () => { this.setState({ saveDialog: false }); this.refocus('open-save'); },
       showSaveInline: isMd, showActionBar: !isMd && !s.kbOpen && (s.phase === 'selected' || s.phase === 'review'),
       // library
-      libLoading: s.libLoading, libError: s.libError, hasLibError: !!s.libError, retryLib: () => this.loadLibrary(),
-      libEmpty: !s.libLoading && !s.libError && s.items.length === 0, libNoResults: !s.libLoading && !s.libError && s.items.length > 0 && list.length === 0, libHasResults: !s.libLoading && !s.libError && list.length > 0,
-      q: s.q, onQ: (e) => this.setState({ q: e.target.value }), resultCount: s.libLoading ? 'Loading your library' : list.length === 1 ? '1 extract' : `${list.length} extracts`,
+      libLoading: libBusy, libError: s.libError, hasLibError: !!s.libError, retryLib: () => this.loadLibrary(),
+      libEmpty: !libBusy && !s.libError && s.items.length === 0, libNoResults: !libBusy && !s.libError && s.items.length > 0 && list.length === 0, libHasResults: !libBusy && !s.libError && list.length > 0,
+      q: s.q, onQ: (e) => this.setState({ q: e.target.value }), resultCount: libBusy ? (s.libLoading ? 'Loading your library' : 'Updating results') : list.length === 1 ? '1 extract' : `${list.length} extracts`,
       results: list.map((it) => ({ id: it.id, title: it.title, meta: [it.category || 'No category', `${(it.tags || []).length} tags`, fmtDate(it.updatedAt)].join(' \u00b7 '), first: (it.text || '').split('\n').find((l) => l.trim()) || '', tagsText: (it.tags || []).map((t) => `#${t}`).join(' '), open: (e) => { e.preventDefault(); this.openItem(it); }, current: it.id === s.save.editingId && s.phase === 'review' })).map((r) => ({ ...r, style: { display: 'flex', flexDirection: 'column', gap: '4px', padding: '14px 20px', textDecoration: 'none', color: 'var(--text-primary)', background: r.current ? 'var(--surface-selected)' : 'transparent', boxShadow: r.current ? 'inset 0 -2px 0 var(--border-strong)' : 'none' } })),
       catOptions: cats.map((c) => ({ value: c, label: c, selected: s.catFilter === c })), hasCats: cats.length > 0, catFilter: s.catFilter, onCat: (e) => this.setState({ catFilter: e.target.value }),
       tagOptions: allTags.map((t) => ({ label: `#${t}`, checked: s.tagFilter.includes(t), toggle: () => this.setState((st) => ({ tagFilter: st.tagFilter.includes(t) ? st.tagFilter.filter((x) => x !== t) : [...st.tagFilter, t] })) })), hasTagOpts: allTags.length > 0, noTagOpts: allTags.length === 0,
@@ -2242,6 +2355,27 @@ class Component extends DCLogic {
       skelSweep: { position: 'absolute', inset: 0, background: 'linear-gradient(90deg, transparent 0%, ' + (mode === 'dark' ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.75)') + ' 50%, transparent 100%)', transform: 'translateX(-100%)', animation: 'mlShimmer 1.4s ease-in-out infinite', pointerEvents: 'none' },
       dlgTitle: d ? d.title : '', dlgBody: d ? d.body : '', dlgCancel: d ? d.cancel : '', dlgConfirm: d ? d.confirm : '', dlgAlt: d ? d.alt : '', hasAlt: !!(d && d.alt),
       dlgConfirmStyle: { height: '44px', padding: '0 16px', display: 'inline-flex', alignItems: 'center', gap: '8px', borderRadius: '4px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', border: 0, ...(d && d.destructive ? { color: '#FFFFFF', background: 'var(--status-error)' } : { color: 'var(--text-on-action)', background: 'var(--action-primary)' }) },
+      dlgClose: () => this.closeDialog(),
+      dlgButtons: (() => {
+        if (!d) return [];
+        // positive action = solid primary on the right; dismissive = neutral outline on the left; a non-primary destructive action = red outline
+        const prim = d.primary || 'confirm';
+        const base = { height: '44px', padding: '0 16px', display: 'inline-flex', alignItems: 'center', gap: '8px', borderRadius: '4px', fontSize: '14px', cursor: 'pointer', whiteSpace: 'nowrap' };
+        const solid = (danger) => ({ ...base, fontWeight: 600, border: '1px solid transparent', color: danger ? '#FFFFFF' : 'var(--text-on-action)', background: danger ? 'var(--status-error)' : 'var(--action-primary)' });
+        const outline = (danger) => ({ ...base, fontWeight: 500, background: 'var(--surface-panel)', color: danger ? 'var(--status-error)' : 'var(--text-primary)', border: '1px solid ' + (danger ? 'var(--status-error)' : 'var(--border-strong)') });
+        const run = (f) => () => { this.closeDialog(); f && f(); };
+        const list = [
+          { key: 'cancel', label: d.cancel, icon: d.cancelIcon, danger: false, onClick: run(d.onCancel) },
+          d.alt ? { key: 'alt', label: d.alt, icon: d.altIcon, danger: !!d.altDestructive, onClick: run(d.onAlt) } : null,
+          d.confirm ? { key: 'confirm', label: d.confirm, icon: d.confirmIcon, danger: !!d.destructive, onClick: run(d.onConfirm) } : null
+        ].filter((b) => b && b.label);
+        const primary = list.find((b) => b.key === prim) || list[list.length - 1];
+        const rest = list.filter((b) => b !== primary);
+        // every dialog button carries an icon: given one, else by meaning
+        const BY = { 'Keep editing': 'ph-pencil-simple', 'Keep my edits': 'ph-pencil-simple', 'Close': 'ph-x', 'Cancel': 'ph-x', 'Not now': 'ph-x', 'Remove': 'ph-trash', 'Delete': 'ph-trash', 'Delete all': 'ph-trash', 'Discard edits': 'ph-trash', 'Discard and start new': 'ph-trash', 'Discard and open': 'ph-trash' };
+        const iconOf = (b) => b.icon || BY[b.label] || (b.danger ? 'ph-trash' : b.key === 'cancel' ? 'ph-x' : 'ph-check');
+        return [...rest, primary].map((b) => ({ id: b.key === 'cancel' ? 'dlg-cancel' : 'dlg-' + b.key, label: b.label, icon: iconOf(b), hasIcon: true, onClick: b.onClick, style: b === primary ? solid(b.danger) : outline(b.danger) }));
+      })(),
       dlgDoCancel: () => this.closeDialog(), dlgDoConfirm: () => { const f = d && d.onConfirm; this.closeDialog(); f && f(); }, dlgDoAlt: () => { const f = d && d.onAlt; this.closeDialog(); f && f(); }, stop: (e) => e.stopPropagation(),
       toast: s.toast ? s.toast.text : '', hasToast: !!s.toast, toastUndo: !!(s.toast && s.toast.undo), doUndo: () => { const u = s.toast && s.toast.undo; this.setState({ toast: null }); u && u(); }, dismissToast: () => this.setState({ toast: null })
     };
