@@ -110,33 +110,44 @@
       else if(s._tl.time()!==0&&getComputedStyle(sl).visibility==='hidden')s._tl.time(0)});
     if(any)hRaf=requestAnimationFrame(heroClock)}
   function rotSync(){slots.forEach(s=>{if(!s.isConnected){slots.delete(s);return}if(!s._tl||s._hero)return;
-    if(!live(s)){clearTimeout(s._t);s._t=0;s._tl.pause(0)}
+    if(!live(s)){clearTimeout(s._t);s._t=0;s._tl.pause(0);rotDraw(s,0)}
     else if(s._tl.paused()&&!s._t){const wait=Math.max(0,(s._busy||0)-performance.now())+START;s._t=setTimeout(()=>{s._t=0;if(!live(s))return;if((s._busy||0)>performance.now()){rotSync();return}s._tl.play()},wait)}})}
   function rot(slot){
     if(slot._rot)return;const g=window.gsap;if(!g)return;
     const words=[...slot.querySelectorAll('[data-rot-w]')];if(words.length<2||RM())return;slot._rot=1;
     g.set(slot,{width:words[0].offsetWidth});
     words.forEach(w=>{w.style.position='absolute';w.style.left='0';w.style.top='0'});
-    g.set(words.slice(1),{yPercent:115});words.forEach(w=>{w.style.visibility='visible'});
     const n=words.length;
-    if(slot.closest('#hero '+HERO_SL)){slot._hero=1;const tl=g.timeline({paused:true}),step=n>2?(HLAST-ROLL-HFIRST)/(n-2):0;
+    if(!slot.closest('#hero '+HERO_SL)){
+      // Loop: one clock, every word's position computed from it, so at most two words are ever in the slot and they never share it
+      slot._words=words;slot._ww=words.map(w=>w.offsetWidth);rotDraw(slot,0);words.forEach(w=>{w.style.visibility='visible'});
+      slot._tl=g.to({},{duration:n*(HOLD+ROLL),ease:'none',repeat:-1,paused:true,onUpdate(){rotDraw(slot,this.time())}});slots.add(slot);
+      new IntersectionObserver(es=>{slot._vis=es[0].isIntersecting;rotSync()},{threshold:0.5}).observe(slot);return}
+    g.set(words.slice(1),{yPercent:115});words.forEach(w=>{w.style.visibility='visible'});
+    {slot._hero=1;const tl=g.timeline({paused:true}),step=n>2?(HLAST-ROLL-HFIRST)/(n-2):0;
       for(let i=0;i<n-1;i++){const cur=words[i],next=words[i+1],t=HFIRST+i*step;
         tl.fromTo(cur,{yPercent:0},{yPercent:-115,duration:ROLL,ease:'power3.inOut',immediateRender:false},t)
           .fromTo(next,{yPercent:115},{yPercent:0,duration:ROLL,ease:'power3.inOut',immediateRender:false},t)
           .fromTo(slot,{width:()=>cur.offsetWidth},{width:()=>next.offsetWidth,duration:ROLL,ease:'expo.inOut',immediateRender:false},t)}
       tl.time(0);slot._tl=tl;slot._words=words;slots.add(slot);if(!hRaf)hRaf=requestAnimationFrame(heroClock);return}
-    const tl=g.timeline({repeat:-1,paused:true});
-    words.forEach((cur,i)=>{const next=words[(i+1)%n],t=i*(HOLD+ROLL)+HOLD;
-      tl.to(cur,{yPercent:-115,duration:ROLL,ease:'power3.inOut'},t)
-        .fromTo(next,{yPercent:115},{yPercent:0,duration:ROLL,ease:'power3.inOut',immediateRender:false},t)
-        .to(slot,{width:()=>next.offsetWidth,duration:ROLL,ease:'expo.inOut',onUpdate:()=>{if(slot._ph&&slot._ph.isConnected)slot._ph.style.width=slot.offsetWidth+'px'}},t)});
-    tl.invalidate();slot._tl=tl;slot._words=words;slots.add(slot);
-    new IntersectionObserver(es=>{slot._vis=es[0].isIntersecting;rotSync()},{threshold:0.5}).observe(slot);
+  }
+  let EM,EW;
+  function rotDraw(s,t){
+    const W=s._words,n=W.length,C=HOLD+ROLL;if(!W||!s._ww)return;
+    if(!EM){EM=window.gsap.parseEase('power3.inOut');EW=window.gsap.parseEase('expo.inOut')}
+    t=((t%(n*C))+n*C)%(n*C);const i=Math.floor(t/C)%n,j=(i+1)%n,p=t-Math.floor(t/C)*C;
+    const k=p<=HOLD?0:Math.min(1,(p-HOLD)/ROLL),e=EM(k),ew=EW(k);
+    W.forEach((w,x)=>{const y=x===i?-115*e:x===j&&k>0?115*(1-e):115;w.style.transform='translate3d(0,'+y.toFixed(2)+'%,0)'});
+    const a=s._ww[i],b=s._ww[j];s.style.width=(a+(b-a)*ew).toFixed(2)+'px';
+    if(s._ph&&s._ph.isConnected)s._ph.style.width=s.style.width;
   }
   function rotScan(){if(!window.gsap||RM())return;
     const go=()=>document.querySelectorAll('[data-rot]').forEach(rot);
     document.fonts&&document.fonts.ready?document.fonts.ready.then(go):go()}
-  window.addEventListener('resize',()=>{const g=window.gsap;if(!g)return;slots.forEach(s=>{if(!s._tl)return;s._tl.invalidate();
+  let rzW=window.innerWidth;
+  window.addEventListener('resize',()=>{const g=window.gsap;if(!g)return;if(window.innerWidth===rzW)return;rzW=window.innerWidth;slots.forEach(s=>{if(!s._tl)return;
+    if(!s._hero){s._ww=s._words.map(w=>w.offsetWidth);rotDraw(s,s._tl.time());return}
+    s._tl.invalidate();
     const cur=s._words.find(w=>Math.abs(g.getProperty(w,'yPercent'))<1)||s._words[0];g.set(s,{width:cur.offsetWidth})})});
 
   // Paragraph line reveal: real word spans (React-owned) grouped by offsetTop into lines; style-only animation
