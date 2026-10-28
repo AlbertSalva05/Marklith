@@ -34,16 +34,16 @@ services:
         value: public, max-age=86400
       - path: /sitemap.xml
         name: Cache-Control
-        value: public, max-age=86400
+        value: no-cache
       - path: /support.js
         name: Cache-Control
-        value: public, max-age=86400
+        value: no-cache
       - path: /src/*
         name: Cache-Control
         value: no-cache
       - path: /assets/*
         name: Cache-Control
-        value: public, max-age=2592000
+        value: public, max-age=86400
       - path: /vendor/*
         name: Cache-Control
         value: public, max-age=31536000, immutable

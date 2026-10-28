@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
+<meta name="marklith-build" content="2026.10.28.1">
+<script src="./support.js?v=2026.10.28.1"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
-<title>marklith</title>
+<title>marklith: image text to Markdown, in your browser</title>
 <meta name="description" content="Upload a screenshot or photo, extract its text in your browser, correct it, and copy it as Markdown, an outline or prompt-ready text.">
 <link rel="canonical" href="https://marklith.onrender.com/">
 <meta name="robots" content="index, follow">
@@ -17,25 +18,30 @@
 <meta property="og:title" content="marklith: image text to Markdown, in your browser">
 <meta property="og:description" content="Extract text from screenshots and photos in your browser, correct it, and copy it as Markdown, an outline or prompt-ready text.">
 <meta property="og:url" content="https://marklith.onrender.com/">
-<meta property="og:image" content="https://marklith.onrender.com/assets/og-image.png">
+<meta property="og:image" content="https://marklith.onrender.com/assets/og-image-v2.png?v=202610281">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="marklith wordmark with the line: Image text to Markdown, in your browser.">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="A photographed page with a crop selection beside the marklith editor showing the same text as Markdown.">
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="marklith: image text to Markdown, in your browser">
 <meta name="twitter:description" content="Extract text from screenshots and photos in your browser, correct it, and copy it as Markdown, an outline or prompt-ready text.">
-<meta name="twitter:image" content="https://marklith.onrender.com/assets/og-image.png">
+<meta name="twitter:image" content="https://marklith.onrender.com/assets/og-image-v2.png?v=202610281">
+<meta name="twitter:image:alt" content="A photographed page with a crop selection beside the marklith editor showing the same text as Markdown.">
+<meta name="application-name" content="marklith">
+<meta name="apple-mobile-web-app-title" content="marklith">
+<meta name="format-detection" content="telephone=no">
 <link rel="icon" href="./favicon.ico" sizes="any">
 <link rel="icon" href="./assets/favicon/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="./assets/favicon/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="./assets/favicon/apple-touch-icon.png">
 <link rel="manifest" href="./site.webmanifest">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"marklith","url":"https://marklith.onrender.com/","description":"Extract text from screenshots and photos in your browser and copy it as Markdown, an outline or prompt-ready text.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any modern browser","offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"image":"https://marklith.onrender.com/assets/og-image.png"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"marklith","url":"https://marklith.onrender.com/","description":"Extract text from screenshots and photos in your browser and copy it as Markdown, an outline or prompt-ready text.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any modern browser","offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"image":"https://marklith.onrender.com/assets/og-image-v2.png?v=202610281"}</script>
 <meta name="theme-color" content="#17243A">
 <link rel="preload" href="./vendor/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="./vendor/fonts/fonts.css">
-<link rel="stylesheet" href="./vendor/phosphor/style.css">
+<link rel="stylesheet" href="./vendor/fonts/fonts.css?v=2026.10.28.1">
+<link rel="stylesheet" href="./vendor/phosphor/style.css?v=2026.10.28.1">
 <style>
 body{margin:0;font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 *{box-sizing:border-box}
@@ -75,9 +81,9 @@ button:disabled{opacity:.38;cursor:not-allowed}
 @media print{[data-rv-ov]{display:none}[data-rv]{-webkit-text-fill-color:currentcolor !important}}
 body{zoom:var(--ml-zoom,1)}
 </style>
-<script src="./vendor/gsap/gsap.min.js" defer></script>
-<script src="./src/marklith-fx.js" defer></script>
-<script type="module" src="./src/marklith-beam.js"></script>
+<script src="./vendor/gsap/gsap.min.js?v=2026.10.28.1" defer></script>
+<script src="./src/marklith-fx.js?v=2026.10.28.1" defer></script>
+<script type="module" src="./src/marklith-beam.js?v=2026.10.28.1"></script>
 <script>try{var mlz={lg:1.125,xl:1.25}[localStorage.getItem('marklith-text')];if(mlz)document.documentElement.style.setProperty('--ml-zoom',mlz)}catch(e){}</script>
 </helmet>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -165,31 +171,31 @@ body{zoom:var(--ml-zoom,1)}
         </section>
 
         <section id="how" aria-labelledby="how-h" style="outline:none">
-          <div style="max-width:1360px;margin:0 auto;padding:clamp(56px,7vw,104px) clamp(16px,3vw,40px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:48px 72px">
+          <div style="max-width:1360px;margin:0 auto;padding:clamp(56px,7vw,104px) clamp(16px,3vw,40px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:48px 72px;align-items:stretch">
             <div style="display:flex;flex-direction:column;gap:20px">
               <p style="margin:0;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:var(--action-primary)"><i class="ph ph-path" aria-hidden="true" style="font-size:18px"></i>Workflow</p>
-              <h2 id="how-h" style="margin:0;font-size:clamp(30px,3.4vw,44px);line-height:1.1;font-weight:600;letter-spacing:-0.02em;text-wrap:balance;max-width:16ch">From a <span data-sr="" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">screenshot, photo or scan</span><span data-rot="" aria-hidden="true" style="position:relative;display:inline-block;overflow:clip;height:1.2em;vertical-align:-0.22em;line-height:1.2em;background:var(--surface-selected);color:var(--text-link);-webkit-text-fill-color:currentcolor;border-radius:4px;white-space:nowrap"><span data-rot-w="" style="position:relative;display:inline-block;padding:0 0.18em;white-space:nowrap">screenshot</span><span data-rot-w="" style="position:absolute;left:0;top:0;visibility:hidden;display:inline-block;padding:0 0.18em;white-space:nowrap">photo</span><span data-rot-w="" style="position:absolute;left:0;top:0;visibility:hidden;display:inline-block;padding:0 0.18em;white-space:nowrap">scan</span></span> to text you can use.</h2>
+              <h2 id="how-h" style="margin:0;font-size:clamp(30px,3.4vw,44px);line-height:1.1;font-weight:600;letter-spacing:-0.02em;text-wrap:balance;max-width:16ch">From a screenshot, photo or scan to text you can use.</h2>
               <ol style="list-style:none;margin:0;padding:0;border-bottom:1px solid var(--border-divider)">
                 <sc-for list="{{ wfItems }}" as="it" hint-placeholder-count="3">
                 <li style="display:flex;gap:16px;align-items:flex-start;padding:20px 0;border-top:1px solid var(--border-divider)"><span data-w-lead="" style="width:44px;height:44px;flex:none;display:grid;place-items:center;background:var(--surface-selected);color:var(--action-primary);border-radius:2px"><i class="ph {{ it.icon }}" aria-hidden="true" style="font-size:22px"></i></span><span style="display:flex;flex-direction:column;gap:6px;min-width:0;flex:1 1 auto"><span data-w-lead="" style="font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:500;font-variant-numeric:tabular-nums lining-nums;font-feature-settings:'tnum' 1,'lnum' 1;letter-spacing:0.01em;font-size:13px;line-height:20px;color:var(--text-secondary)">{{ it.num }}</span><span data-line-split="" style="display:block;font-size:clamp(19px,1.7vw,22px);line-height:1.3;font-weight:600;letter-spacing:-0.015em;text-wrap:pretty"><h3 style="display:inline;margin:0;font:inherit;letter-spacing:inherit;color:var(--text-primary)"><sc-for list="{{ it.tw }}" as="w" hint-placeholder-count="2"><span data-w="" style="display:inline-block;white-space:nowrap;margin-right:0.26em">{{ w }}</span></sc-for></h3><span style="color:var(--text-secondary)"><sc-for list="{{ it.dw }}" as="w" hint-placeholder-count="6"><span data-w="" style="display:inline-block;white-space:nowrap;margin-right:0.26em">{{ w }}</span></sc-for></span></span></span></li>
                 </sc-for>
               </ol>
-              <a href="#/workflow" onClick="{{ goWorkflow }}" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:16px;font-weight:500;align-self:flex-start" style-hover="gap:12px">See the full workflow<i class="ph ph-arrow-right" aria-hidden="true" style="font-size:16px"></i></a>
+              <a href="#/workflow" onClick="{{ goWorkflow }}" style="margin-top:auto;display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:16px;font-weight:500;align-self:flex-start" style-hover="gap:12px">See the full workflow<i class="ph ph-arrow-right" aria-hidden="true" style="font-size:16px"></i></a>
             </div>
-            <div style="display:flex;flex-direction:column;gap:20px">
+            <div data-rv-group="" style="display:flex;flex-direction:column;gap:20px">
               <p style="margin:0;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:var(--action-primary)"><i class="ph ph-swatches" aria-hidden="true" style="font-size:18px"></i>Design system</p>
-              <h2 style="margin:0;font-size:clamp(30px,3.4vw,44px);line-height:1.1;font-weight:600;letter-spacing:-0.02em;text-wrap:balance;max-width:16ch">A small, calm set of <span data-sr="" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">parts, colours, type and icons</span><span data-rot="" aria-hidden="true" style="position:relative;display:inline-block;overflow:clip;height:1.2em;vertical-align:-0.22em;line-height:1.2em;background:var(--surface-selected);color:var(--text-link);-webkit-text-fill-color:currentcolor;border-radius:4px;white-space:nowrap"><span data-rot-w="" style="position:relative;display:inline-block;padding:0 0.18em;white-space:nowrap">parts.</span><span data-rot-w="" style="position:absolute;left:0;top:0;visibility:hidden;display:inline-block;padding:0 0.18em;white-space:nowrap">colours.</span><span data-rot-w="" style="position:absolute;left:0;top:0;visibility:hidden;display:inline-block;padding:0 0.18em;white-space:nowrap">type.</span><span data-rot-w="" style="position:absolute;left:0;top:0;visibility:hidden;display:inline-block;padding:0 0.18em;white-space:nowrap">icons.</span></span></h2>
+              <h2 style="margin:0;font-size:clamp(30px,3.4vw,44px);line-height:1.1;font-weight:600;letter-spacing:-0.02em;text-wrap:balance;max-width:16ch">A small, calm set of parts, colours, type and icons.</h2>
               <p style="margin:0;font-size:17px;line-height:26px;color:var(--text-secondary);max-width:48ch">Navy ink and one action blue, IBM Plex for reading and Plex Mono for extracted text, in light, dark and high contrast themes.</p>
-              <div style="border:1px solid var(--border-divider);background:var(--surface-panel);border-radius:4px;overflow:hidden">
+              <div style="flex:1 1 auto;display:flex;flex-direction:column;border:1px solid var(--border-divider);background:var(--surface-panel);border-radius:4px;overflow:hidden">
                 <ul aria-label="Core colours" style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr))">
                   <sc-for list="{{ homeSwatches }}" as="w" hint-placeholder-count="7"><li title="{{ w.name }} {{ w.hex }}"><span style="{{ w.chip }}"></span><span style="display:block;padding:6px 8px;font-size:12px;line-height:16px;font-weight:500;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ w.name }}</span></li></sc-for>
                 </ul>
-                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:12px;padding:18px 20px;border-top:1px solid var(--border-divider)">
+                <div style="flex:1 1 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-content:center;align-items:baseline;gap:12px;padding:18px 20px;border-top:1px solid var(--border-divider)">
                   <span style="font-size:28px;line-height:36px;font-weight:600;letter-spacing:-0.01em">Plex Sans</span>
                   <span style="font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--text-secondary)">Plex Mono 0O 1lI</span>
                 </div>
               </div>
-              <a href="#/design-system" onClick="{{ goDs }}" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:16px;font-weight:500;align-self:flex-start" style-hover="gap:12px">Explore the design system<i class="ph ph-arrow-right" aria-hidden="true" style="font-size:16px"></i></a>
+              <a href="#/design-system" onClick="{{ goDs }}" style="margin-top:auto;display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:16px;font-weight:500;align-self:flex-start" style-hover="gap:12px">Explore the design system<i class="ph ph-arrow-right" aria-hidden="true" style="font-size:16px"></i></a>
             </div>
           </div>
         </section>
@@ -198,7 +204,7 @@ body{zoom:var(--ml-zoom,1)}
           <div style="max-width:1360px;margin:0 auto;padding:clamp(56px,7vw,104px) clamp(16px,3vw,40px);display:flex;flex-wrap:wrap;gap:40px 64px;align-items:flex-start">
             <div style="flex:1 1 300px;max-width:400px;display:flex;flex-direction:column;gap:16px">
               <p style="margin:0;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:var(--action-primary)"><i class="ph ph-question" aria-hidden="true" style="font-size:18px"></i>FAQ</p>
-              <h2 id="faq-h" style="margin:0;font-size:clamp(30px,3.4vw,44px);line-height:1.1;font-weight:600;letter-spacing:-0.02em;text-wrap:balance"><span data-sr="" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Privacy, accuracy and storage</span><span data-rot="" aria-hidden="true" style="position:relative;display:inline-block;overflow:clip;height:1.2em;vertical-align:-0.22em;line-height:1.2em;background:var(--surface-selected);color:var(--text-link);-webkit-text-fill-color:currentcolor;border-radius:4px;white-space:nowrap"><span data-rot-w="" style="position:relative;display:inline-block;padding:0 0.18em;white-space:nowrap">Privacy</span><span data-rot-w="" style="position:absolute;left:0;top:0;visibility:hidden;display:inline-block;padding:0 0.18em;white-space:nowrap">Accuracy</span><span data-rot-w="" style="position:absolute;left:0;top:0;visibility:hidden;display:inline-block;padding:0 0.18em;white-space:nowrap">Storage</span></span> questions, answered.</h2>
+              <h2 id="faq-h" style="margin:0;font-size:clamp(30px,3.4vw,44px);line-height:1.1;font-weight:600;letter-spacing:-0.02em;text-wrap:balance">Privacy, accuracy and storage questions, answered.</h2>
               <p style="margin:0;font-size:16px;line-height:24px;color:var(--text-secondary)">The four we hear most. The rest, sorted by topic, are on the FAQ page.</p>
               <a href="#/faq" onClick="{{ goFaq }}" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:16px;font-weight:500;align-self:flex-start" style-hover="gap:12px"><span style="white-space:nowrap">See all {{ faqTotal }} questions</span><i class="ph ph-arrow-right" aria-hidden="true" style="font-size:16px"></i></a>
             </div>
@@ -1205,7 +1211,7 @@ body{zoom:var(--ml-zoom,1)}
       <sc-if value="{{ showFooterCta }}" hint-placeholder-val="{{ false }}">
       <div style="display:flex;flex-wrap:wrap;gap:24px 48px;align-items:flex-end;justify-content:space-between;padding-bottom:44px;margin-bottom:0;border-bottom:1px solid #33435E">
         <div style="flex:1 1 420px;display:flex;flex-direction:column;gap:10px">
-          <h2 style="margin:0;font-size:clamp(28px,3.4vw,42px);line-height:1.1;font-weight:600;letter-spacing:-0.02em;max-width:18ch;text-wrap:balance">Turn your next <span data-sr="" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">screenshot, photo or slide</span><span data-rot="" aria-hidden="true" style="position:relative;display:inline-block;overflow:clip;height:1.2em;vertical-align:-0.22em;line-height:1.2em;background:rgba(53,106,230,0.28);color:inherit;-webkit-text-fill-color:currentcolor;border-radius:4px;white-space:nowrap"><span data-rot-w="" style="position:relative;display:inline-block;padding:0 0.18em;white-space:nowrap">screenshot</span><span data-rot-w="" style="position:absolute;left:0;top:0;visibility:hidden;display:inline-block;padding:0 0.18em;white-space:nowrap">photo</span><span data-rot-w="" style="position:absolute;left:0;top:0;visibility:hidden;display:inline-block;padding:0 0.18em;white-space:nowrap">slide</span></span> into Markdown.</h2>
+          <h2 style="margin:0;font-size:clamp(28px,3.4vw,42px);line-height:1.1;font-weight:600;letter-spacing:-0.02em;max-width:18ch;text-wrap:balance">Turn your next screenshot, photo or slide into Markdown.</h2>
           <p style="margin:0;color:#C3CBD8;max-width:48ch;font-size:16px;line-height:24px">No sign-up. Your images stay in this browser.</p>
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:10px">
@@ -1214,8 +1220,8 @@ body{zoom:var(--ml-zoom,1)}
         </div>
       </div>
       </sc-if>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:40px 48px;padding:44px 0;align-items:start">
-        <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+      <div style="display:flex;flex-wrap:wrap;gap:40px 64px;padding:44px 0;align-items:flex-start">
+        <div style="flex:1 1 280px;max-width:400px;display:flex;flex-direction:column;gap:14px;min-width:0">
           <a href="#/" onClick="{{ goHome }}" aria-label="marklith, home" style="display:flex;align-items:center;gap:10px;color:#FFFFFF;text-decoration:none;align-self:flex-start;min-height:44px">
             <svg width="32" height="32" aria-hidden="true" style="color:#FFFFFF"><use href="#ml-mark"></use></svg>
             <svg width="96" height="20" aria-hidden="true" style="color:#FFFFFF"><use href="#ml-word"></use></svg>
@@ -1223,7 +1229,7 @@ body{zoom:var(--ml-zoom,1)}
           <p style="margin:0;color:#C3CBD8;max-width:38ch;font-size:15px;line-height:22px">Reads the text in your screenshots and photos, then hands it back as Markdown, an outline or prompt-ready text.</p>
           <p style="margin:0;display:flex;align-items:center;gap:8px;color:#C3CBD8;font-size:14px"><i class="ph ph-lock-key" aria-hidden="true" style="font-size:16px;color:#8FB0FF"></i>Processed on this device</p>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:32px 24px;align-items:start;min-width:0">
+        <div style="flex:2 1 560px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,128px),1fr));gap:32px 24px;align-items:start;min-width:0">
         <sc-for list="{{ footerGroups }}" as="g" hint-placeholder-count="3">
           <nav aria-label="{{ g.title }}" style="display:flex;flex-direction:column;min-width:0">
             <h3 style="margin:12px 0 8px;font-size:14px;line-height:20px;font-weight:600;color:#C3CBD8">{{ g.title }}</h3>
@@ -1241,7 +1247,7 @@ body{zoom:var(--ml-zoom,1)}
       <div style="border-top:1px solid #33435E;padding:20px 0 28px;display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;align-items:center;font-size:14px;color:#C3CBD8">
         <div style="flex:1 1 320px;display:flex;flex-direction:column;gap:4px">
           <span>© {{ year }} marklith.</span>
-          <span style="font-size:13px">Text recognition by Tesseract.js (Apache 2.0). Type: IBM Plex (SIL OFL 1.1). Icons: Phosphor (MIT).</span>
+          <span style="font-size:13px">Text recognition by Tesseract.js (Apache 2.0). Type: IBM Plex (SIL OFL 1.1). Icons: Phosphor (MIT). Build 2026.10.28.1.</span>
         </div>
         <nav aria-label="Legal" style="display:flex;flex-wrap:wrap;gap:0 20px">
           <a href="#/privacy" onClick="{{ goPrivacy }}" style="min-height:44px;display:flex;align-items:center;gap:6px;color:#FFFFFF;text-decoration:none;font-size:14px" style-hover="color:#8FB0FF;text-decoration:underline"><i class="ph ph-shield-check" aria-hidden="true" style="font-size:16px"></i>Privacy policy</a>
@@ -1525,7 +1531,7 @@ class Component extends DCLogic {
       if (fs.length) { e.preventDefault(); this.pickFiles(fs); }
     };
     window.addEventListener('paste', this.onPaste);
-    import('./src/marklith-core.js').then((core) => {
+    import('./src/marklith-core.js?v=2026.10.28.1').then((core) => {
       this.core = core;
       this.setState({ coreReady: true, unsupported: core.browserSupport() });
       this.loadLibrary();

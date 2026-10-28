@@ -40,3 +40,9 @@ Image text to Markdown, in the browser. Static site, no build step. Render serve
 - Replace `https://marklith.onrender.com` with the real domain in `index.html` (canonical, og:url, og:image, twitter:image, JSON-LD), `robots.txt` and `sitemap.xml`.
 - Replace `[CONTACT EMAIL]` in the Privacy and Terms pages, and get both reviewed by a qualified person.
 - Pages use hash routes (`#/library`), which search engines treat as one URL, so the sitemap lists only `/`.
+
+## Updates showing after a manual deploy
+
+- `index.html`, `src/*`, `support.js` and `sitemap.xml` are served with `no-cache`, so browsers check for a new copy on every visit.
+- Every script and stylesheet in `index.html` carries a `?v=` build number (currently `2026.10.28.1`). When you change any file, search `index.html` for the old number and replace every occurrence with a new one, then deploy.
+- The live build number is shown at the end of the footer credits and in the `marklith-build` meta tag.
