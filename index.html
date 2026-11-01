@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-GB">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="marklith-build" content="2026.10.28.1">
-<script src="./support.js?v=2026.10.28.1"></script>
+<meta name="marklith-build" content="2026.11.01-72c3">
+<script src="./support.js?v=9f1be9e3"></script>
 </head>
 <body>
+<noscript><p style="margin:0;padding:16px;background:#17243A;color:#FFFFFF;font:16px/1.5 system-ui,sans-serif">marklith needs JavaScript to read images. Turn it on and reload the page.</p></noscript>
 <x-dc>
 <helmet>
 <title>marklith: image text to Markdown, in your browser</title>
@@ -18,7 +19,7 @@
 <meta property="og:title" content="marklith: image text to Markdown, in your browser">
 <meta property="og:description" content="Extract text from screenshots and photos in your browser, correct it, and copy it as Markdown, an outline or prompt-ready text.">
 <meta property="og:url" content="https://marklith.onrender.com/">
-<meta property="og:image" content="https://marklith.onrender.com/assets/og-image-v2.png?v=202610281">
+<meta property="og:image" content="https://marklith.onrender.com/assets/og-image-v2.png?v=c176469e">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/png">
@@ -27,7 +28,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="marklith: image text to Markdown, in your browser">
 <meta name="twitter:description" content="Extract text from screenshots and photos in your browser, correct it, and copy it as Markdown, an outline or prompt-ready text.">
-<meta name="twitter:image" content="https://marklith.onrender.com/assets/og-image-v2.png?v=202610281">
+<meta name="twitter:image" content="https://marklith.onrender.com/assets/og-image-v2.png?v=c176469e">
 <meta name="twitter:image:alt" content="A photographed page with a crop selection beside the marklith editor showing the same text as Markdown.">
 <meta name="application-name" content="marklith">
 <meta name="apple-mobile-web-app-title" content="marklith">
@@ -37,11 +38,11 @@
 <link rel="icon" href="./assets/favicon/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="./assets/favicon/apple-touch-icon.png">
 <link rel="manifest" href="./site.webmanifest">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"marklith","url":"https://marklith.onrender.com/","description":"Extract text from screenshots and photos in your browser and copy it as Markdown, an outline or prompt-ready text.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any modern browser","offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"image":"https://marklith.onrender.com/assets/og-image-v2.png?v=202610281"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"marklith","url":"https://marklith.onrender.com/","description":"Extract text from screenshots and photos in your browser and copy it as Markdown, an outline or prompt-ready text.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any modern browser","offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"image":"https://marklith.onrender.com/assets/og-image-v2.png?v=c176469e"}</script>
 <meta name="theme-color" content="#17243A">
 <link rel="preload" href="./vendor/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="./vendor/fonts/fonts.css?v=2026.10.28.1">
-<link rel="stylesheet" href="./vendor/phosphor/style.css?v=2026.10.28.1">
+<link rel="stylesheet" href="./vendor/fonts/fonts.css?v=009ad39c">
+<link rel="stylesheet" href="./vendor/phosphor/style.css?v=45677f5c">
 <style>
 body{margin:0;font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 *{box-sizing:border-box}
@@ -81,9 +82,9 @@ button:disabled{opacity:.38;cursor:not-allowed}
 @media print{[data-rv-ov]{display:none}[data-rv]{-webkit-text-fill-color:currentcolor !important}}
 body{zoom:var(--ml-zoom,1)}
 </style>
-<script src="./vendor/gsap/gsap.min.js?v=2026.10.28.1" defer></script>
-<script src="./src/marklith-fx.js?v=2026.10.28.1" defer></script>
-<script type="module" src="./src/marklith-beam.js?v=2026.10.28.1"></script>
+<script src="./vendor/gsap/gsap.min.js?v=24f1dfe4" defer></script>
+<script src="./src/marklith-fx.js?v=35d4ac93" defer></script>
+<script type="module" src="./src/marklith-beam.js?v=dc1c25ea"></script>
 <script>try{var mlz={lg:1.125,xl:1.25}[localStorage.getItem('marklith-text')];if(mlz)document.documentElement.style.setProperty('--ml-zoom',mlz)}catch(e){}</script>
 </helmet>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -331,7 +332,7 @@ body{zoom:var(--ml-zoom,1)}
                 </figure>
                 <sc-if value="{{ canPick }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px">
                   <sc-if value="{{ pickOn }}" hint-placeholder-val="{{ false }}"><button type="button" id="pick-btn" onClick="{{ togglePick }}" aria-pressed="true" style="height:44px;padding:0 14px;display:inline-flex;align-items:center;gap:8px;background:var(--action-primary);color:var(--text-on-action);border:1px solid var(--action-primary);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer;flex:none" style-hover="background:var(--action-primary-hover)"><i class="ph ph-check" aria-hidden="true" style="font-size:18px"></i>Done selecting</button></sc-if>
-                  <sc-if value="{{ pickOff }}" hint-placeholder-val="{{ true }}"><button type="button" id="pick-btn" onClick="{{ togglePick }}" aria-pressed="false" style="height:44px;padding:0 14px;display:inline-flex;align-items:center;gap:8px;background:var(--surface-panel);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer;flex:none" style-hover="background:var(--surface-hover)"><i class="ph ph-selection-plus" aria-hidden="true" style="font-size:18px"></i>Read an area</button></sc-if>
+                  <sc-if value="{{ pickOff }}" hint-placeholder-val="{{ true }}"><button type="button" id="pick-btn-off" onClick="{{ togglePick }}" aria-pressed="false" style="height:44px;padding:0 14px;display:inline-flex;align-items:center;gap:8px;background:var(--surface-panel);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:2px;font-size:14px;font-weight:500;cursor:pointer;flex:none" style-hover="background:var(--surface-hover)"><i class="ph ph-selection-plus" aria-hidden="true" style="font-size:18px"></i>Read an area</button></sc-if>
                   <span style="flex:1 1 220px;min-width:0;font-size:13px;line-height:18px;color:var(--text-secondary);text-wrap:pretty">{{ pickHint }}</span>
                 </div></sc-if>
                 <sc-if value="{{ multi }}" hint-placeholder-val="{{ false }}">
@@ -1247,7 +1248,7 @@ body{zoom:var(--ml-zoom,1)}
       <div style="border-top:1px solid #33435E;padding:20px 0 28px;display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;align-items:center;font-size:14px;color:#C3CBD8">
         <div style="flex:1 1 320px;display:flex;flex-direction:column;gap:4px">
           <span>© {{ year }} marklith.</span>
-          <span style="font-size:13px">Text recognition by Tesseract.js (Apache 2.0). Type: IBM Plex (SIL OFL 1.1). Icons: Phosphor (MIT). Build 2026.10.28.1.</span>
+          <span style="font-size:13px">Text recognition by Tesseract.js (Apache 2.0). Type: IBM Plex (SIL OFL 1.1). Icons: Phosphor (MIT). Build 2026.11.01-72c3.</span>
         </div>
         <nav aria-label="Legal" style="display:flex;flex-wrap:wrap;gap:0 20px">
           <a href="#/privacy" onClick="{{ goPrivacy }}" style="min-height:44px;display:flex;align-items:center;gap:6px;color:#FFFFFF;text-decoration:none;font-size:14px" style-hover="color:#8FB0FF;text-decoration:underline"><i class="ph ph-shield-check" aria-hidden="true" style="font-size:16px"></i>Privacy policy</a>
@@ -1280,18 +1281,18 @@ body{zoom:var(--ml-zoom,1)}
         </div>
         <form onSubmit="{{ submitSave }}" noValidate="{{ true }}" style="display:flex;flex-direction:column;gap:14px">
           <div style="display:flex;flex-direction:column;gap:6px">
-            <label for="save-title" style="font-size:14px;font-weight:500">Title <span aria-hidden="true">*</span><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">required</span></label>
-            <input id="save-title" value="{{ saveTitle }}" onChange="{{ onTitle }}" aria-invalid="{{ titleInvalid }}" aria-describedby="save-title-err" autoComplete="off" style="{{ titleInputStyle }}">
-            <sc-if value="{{ titleError }}" hint-placeholder-val="{{ false }}"><p id="save-title-err" style="margin:0;font-size:13px;line-height:18px;color:var(--status-error)">Add a title so you can find this later.</p></sc-if>
+            <label for="save-title-m" style="font-size:14px;font-weight:500">Title <span aria-hidden="true">*</span><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">required</span></label>
+            <input id="save-title-m" value="{{ saveTitle }}" onChange="{{ onTitle }}" aria-invalid="{{ titleInvalid }}" aria-describedby="save-title-err-m" autoComplete="off" style="{{ titleInputStyle }}">
+            <sc-if value="{{ titleError }}" hint-placeholder-val="{{ false }}"><p id="save-title-err-m" style="margin:0;font-size:13px;line-height:18px;color:var(--status-error)">Add a title so you can find this later.</p></sc-if>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px">
-            <label for="save-cat" style="font-size:14px;font-weight:500">Category</label>
-            <input id="save-cat" list="cat-options-m" value="{{ saveCategory }}" onChange="{{ onCategory }}" autoComplete="off" style="height:44px;padding:0 12px;border:1px solid var(--border-control);border-radius:2px;background:var(--surface-panel)">
+            <label for="save-cat-m" style="font-size:14px;font-weight:500">Category</label>
+            <input id="save-cat-m" list="cat-options-m" value="{{ saveCategory }}" onChange="{{ onCategory }}" autoComplete="off" style="height:44px;padding:0 12px;border:1px solid var(--border-control);border-radius:2px;background:var(--surface-panel)">
             <datalist id="cat-options-m"><sc-for list="{{ categories }}" as="c"><option value="{{ c.value }}"></option></sc-for></datalist>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px">
-            <label for="save-tags" style="font-size:14px;font-weight:500">Tags</label>
-            <input id="save-tags" value="{{ tagInput }}" onChange="{{ onTagInput }}" onKeyDown="{{ onTagKey }}" enterKeyHint="done" autoComplete="off" aria-describedby="save-tags-hint-m" style="height:44px;padding:0 12px;border:1px solid var(--border-control);border-radius:2px;background:var(--surface-panel)">
+            <label for="save-tags-m" style="font-size:14px;font-weight:500">Tags</label>
+            <input id="save-tags-m" value="{{ tagInput }}" onChange="{{ onTagInput }}" onKeyDown="{{ onTagKey }}" enterKeyHint="done" autoComplete="off" aria-describedby="save-tags-hint-m" style="height:44px;padding:0 12px;border:1px solid var(--border-control);border-radius:2px;background:var(--surface-panel)">
             <p id="save-tags-hint-m" style="margin:0;font-size:13px;color:var(--text-secondary)">Press Enter or type a comma to add a tag.</p>
             <sc-if value="{{ hasTags }}" hint-placeholder-val="{{ false }}"><ul aria-label="Added tags" style="list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ saveTags }}" as="t"><li style="display:flex;align-items:center;height:32px;padding-left:10px;border:1px solid var(--border-control);border-radius:2px;font-size:14px">{{ t.label }}<button type="button" aria-label="{{ t.aria }}" onClick="{{ t.remove }}" style="width:44px;height:44px;margin:-6px -6px -6px 0;background:none;border:0;cursor:pointer;font-size:16px">×</button></li></sc-for></ul></sc-if>
           </div>
@@ -1531,7 +1532,7 @@ class Component extends DCLogic {
       if (fs.length) { e.preventDefault(); this.pickFiles(fs); }
     };
     window.addEventListener('paste', this.onPaste);
-    import('./src/marklith-core.js?v=2026.10.28.1').then((core) => {
+    import('./src/marklith-core.js?v=3b5cd002').then((core) => {
       this.core = core;
       this.setState({ coreReady: true, unsupported: core.browserSupport() });
       this.loadLibrary();
@@ -1936,7 +1937,7 @@ class Component extends DCLogic {
   }
   async doSave(after) {
     const s = this.state;
-    if (!s.save.title.trim()) { this.setSave({ titleError: true }); this.focusLater('save-title'); return; }
+    if (!s.save.title.trim()) { this.setSave({ titleError: true }); this.focusLater(document.getElementById('save-title-m') ? 'save-title-m' : 'save-title'); return; }
     this.setSave({ status: 'saving', error: '', titleError: false });
     const wasEditing = !!s.save.editingId;
     const now = Date.now(); const id = s.save.editingId || `x${now.toString(36)}${Math.random().toString(36).slice(2, 6)}`;
@@ -2322,7 +2323,7 @@ class Component extends DCLogic {
       submitSave: (e) => { e.preventDefault(); this.doSave(); }, saving: s.save.status === 'saving', saveBtnLabel: s.save.status === 'saving' ? 'Saving' : s.save.editingId ? 'Save changes' : 'Save to library',
       saveStatus, savedOk: s.save.status === 'saved', saveError: s.save.error, hasSaveError: s.save.status === 'error',
       isSavedItem: !!s.save.editingId, deleteCurrent: () => this.deleteCurrent(),
-      saveDialog: s.saveDialog && !isMd, openSave: () => { this.dialogOpener = document.activeElement; this.setState({ saveDialog: true }); this.focusLater('save-title'); }, closeSave: () => { this.setState({ saveDialog: false }); this.refocus('open-save'); },
+      saveDialog: s.saveDialog && !isMd, openSave: () => { this.dialogOpener = document.activeElement; this.setState({ saveDialog: true }); this.focusLater('save-title-m'); }, closeSave: () => { this.setState({ saveDialog: false }); this.refocus('open-save'); },
       showSaveInline: isMd, showActionBar: !isMd && !s.kbOpen && (s.phase === 'selected' || s.phase === 'review'),
       // library
       libLoading: libBusy, libError: s.libError, hasLibError: !!s.libError, retryLib: () => this.loadLibrary(),
