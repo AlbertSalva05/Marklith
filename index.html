@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="marklith-build" content="2026.11.01-72c3">
+<meta name="marklith-build" content="2026.11.01-e1a1">
 <script src="./support.js?v=9f1be9e3"></script>
 </head>
 <body>
@@ -19,7 +19,7 @@
 <meta property="og:title" content="marklith: image text to Markdown, in your browser">
 <meta property="og:description" content="Extract text from screenshots and photos in your browser, correct it, and copy it as Markdown, an outline or prompt-ready text.">
 <meta property="og:url" content="https://marklith.onrender.com/">
-<meta property="og:image" content="https://marklith.onrender.com/assets/og-image-v2.png?v=c176469e">
+<meta property="og:image" content="https://marklith.onrender.com/assets/img/common/og-image.png?v=c176469e">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/png">
@@ -28,21 +28,21 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="marklith: image text to Markdown, in your browser">
 <meta name="twitter:description" content="Extract text from screenshots and photos in your browser, correct it, and copy it as Markdown, an outline or prompt-ready text.">
-<meta name="twitter:image" content="https://marklith.onrender.com/assets/og-image-v2.png?v=c176469e">
+<meta name="twitter:image" content="https://marklith.onrender.com/assets/img/common/og-image.png?v=c176469e">
 <meta name="twitter:image:alt" content="A photographed page with a crop selection beside the marklith editor showing the same text as Markdown.">
 <meta name="application-name" content="marklith">
 <meta name="apple-mobile-web-app-title" content="marklith">
 <meta name="format-detection" content="telephone=no">
 <link rel="icon" href="./favicon.ico" sizes="any">
-<link rel="icon" href="./assets/favicon/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="./assets/favicon/favicon-32.png" sizes="32x32" type="image/png">
-<link rel="apple-touch-icon" href="./assets/favicon/apple-touch-icon.png">
+<link rel="icon" href="./assets/img/common/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="./assets/img/common/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="./assets/img/common/icons/apple-touch-icon.png">
 <link rel="manifest" href="./site.webmanifest">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"marklith","url":"https://marklith.onrender.com/","description":"Extract text from screenshots and photos in your browser and copy it as Markdown, an outline or prompt-ready text.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any modern browser","offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"image":"https://marklith.onrender.com/assets/og-image-v2.png?v=c176469e"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"marklith","url":"https://marklith.onrender.com/","description":"Extract text from screenshots and photos in your browser and copy it as Markdown, an outline or prompt-ready text.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any modern browser","offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"image":"https://marklith.onrender.com/assets/img/common/og-image.png?v=c176469e"}</script>
 <meta name="theme-color" content="#17243A">
-<link rel="preload" href="./vendor/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="./vendor/fonts/fonts.css?v=009ad39c">
-<link rel="stylesheet" href="./vendor/phosphor/style.css?v=45677f5c">
+<link rel="preload" href="./assets/fonts/ibm-plex-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="./assets/css/fonts.css?v=f94c2949">
+<link rel="stylesheet" href="./assets/css/icons.css?v=4b86ca88">
 <style>
 body{margin:0;font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 *{box-sizing:border-box}
@@ -82,9 +82,9 @@ button:disabled{opacity:.38;cursor:not-allowed}
 @media print{[data-rv-ov]{display:none}[data-rv]{-webkit-text-fill-color:currentcolor !important}}
 body{zoom:var(--ml-zoom,1)}
 </style>
-<script src="./vendor/gsap/gsap.min.js?v=24f1dfe4" defer></script>
-<script src="./src/marklith-fx.js?v=35d4ac93" defer></script>
-<script type="module" src="./src/marklith-beam.js?v=dc1c25ea"></script>
+<script src="./assets/js/vendor/gsap.min.js?v=24f1dfe4" defer></script>
+<script src="./assets/js/marklith-fx.js?v=35d4ac93" defer></script>
+<script type="module" src="./assets/js/marklith-beam.js?v=356572e7"></script>
 <script>try{var mlz={lg:1.125,xl:1.25}[localStorage.getItem('marklith-text')];if(mlz)document.documentElement.style.setProperty('--ml-zoom',mlz)}catch(e){}</script>
 </helmet>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -1248,7 +1248,7 @@ body{zoom:var(--ml-zoom,1)}
       <div style="border-top:1px solid #33435E;padding:20px 0 28px;display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;align-items:center;font-size:14px;color:#C3CBD8">
         <div style="flex:1 1 320px;display:flex;flex-direction:column;gap:4px">
           <span>© {{ year }} marklith.</span>
-          <span style="font-size:13px">Text recognition by Tesseract.js (Apache 2.0). Type: IBM Plex (SIL OFL 1.1). Icons: Phosphor (MIT). Build 2026.11.01-72c3.</span>
+          <span style="font-size:13px">Text recognition by Tesseract.js (Apache 2.0). Type: IBM Plex (SIL OFL 1.1). Icons: Phosphor (MIT). Build 2026.11.01-e1a1.</span>
         </div>
         <nav aria-label="Legal" style="display:flex;flex-wrap:wrap;gap:0 20px">
           <a href="#/privacy" onClick="{{ goPrivacy }}" style="min-height:44px;display:flex;align-items:center;gap:6px;color:#FFFFFF;text-decoration:none;font-size:14px" style-hover="color:#8FB0FF;text-decoration:underline"><i class="ph ph-shield-check" aria-hidden="true" style="font-size:16px"></i>Privacy policy</a>
@@ -1532,7 +1532,7 @@ class Component extends DCLogic {
       if (fs.length) { e.preventDefault(); this.pickFiles(fs); }
     };
     window.addEventListener('paste', this.onPaste);
-    import('./src/marklith-core.js?v=3b5cd002').then((core) => {
+    import(new URL('./assets/js/marklith-core.js?v=2c72a9ff', document.baseURI).href).then((core) => {
       this.core = core;
       this.setState({ coreReady: true, unsupported: core.browserSupport() });
       this.loadLibrary();

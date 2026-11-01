@@ -1,0 +1,11 @@
+# OCR language data (downloaded on deploy by render.yaml)
+assets/js/vendor/tesseract/lang/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.log

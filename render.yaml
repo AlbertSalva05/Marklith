@@ -2,7 +2,7 @@ services:
   - type: web
     name: marklith
     runtime: static
-    buildCommand: mkdir -p vendor/tesseract/lang && curl -fsSL -o vendor/tesseract/lang/eng.traineddata.gz https://cdn.jsdelivr.net/npm/@tesseract.js-data/eng@1.0.0/4.0.0_best_int/eng.traineddata.gz
+    buildCommand: mkdir -p assets/js/vendor/tesseract/lang && curl -fsSL -o assets/js/vendor/tesseract/lang/eng.traineddata.gz https://cdn.jsdelivr.net/npm/@tesseract.js-data/eng@1.0.0/4.0.0_best_int/eng.traineddata.gz
     staticPublishPath: .
     headers:
       - path: /*
@@ -38,15 +38,18 @@ services:
       - path: /support.js
         name: Cache-Control
         value: public, max-age=31536000, immutable
-      - path: /src/*
+      - path: /assets/css/*
         name: Cache-Control
         value: public, max-age=31536000, immutable
-      - path: /assets/*
+      - path: /assets/js/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /assets/fonts/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /assets/img/*
         name: Cache-Control
         value: public, max-age=86400
-      - path: /vendor/*
-        name: Cache-Control
-        value: public, max-age=31536000, immutable
-      - path: /vendor/*
+      - path: /assets/js/vendor/*
         name: Access-Control-Allow-Origin
         value: "*"
