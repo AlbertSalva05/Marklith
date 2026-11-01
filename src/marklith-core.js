@@ -12,9 +12,11 @@ export const LIMITS = {
   quality: 0.85
 };
 
-// Self-hosted engine (vendor/). The language file is fetched at build time by render.yaml.
+// SELF_HOST is set to true by build/build-deploy.js (engine in vendor/, language file fetched by render.yaml)
+const SELF_HOST = true;
 const VENDOR = new URL('../vendor/tesseract/', import.meta.url).href;
-const TESSERACT_URL = VENDOR + 'tesseract.min.js';
+const TESSERACT_URL = SELF_HOST ? VENDOR + 'tesseract.min.js' : 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+const VENDOR_OPTS = SELF_HOST ? { workerPath: VENDOR + 'worker.min.js', corePath: VENDOR + 'core', langPath: VENDOR + 'lang', workerBlobURL: false } : {};
 
 export function validateFile(file) {
   if (!file) return { ok: false, reason: 'No file was chosen.' };
@@ -60,7 +62,7 @@ function loadScript(src) {
 }
 
 let regionPromise = null;
-const WORKER_OPTS = () => ({ workerPath: VENDOR + 'worker.min.js', corePath: VENDOR + 'core', langPath: VENDOR + 'lang', workerBlobURL: false });
+const WORKER_OPTS = () => ({ ...VENDOR_OPTS });
 async function getWorker(lang, onProgress, region) {
   if (region) {
     // own worker so a picked area reads instantly even while the background scan is busy
@@ -73,10 +75,7 @@ async function getWorker(lang, onProgress, region) {
       onProgress({ stage: 1, label: 'Loading text engine (first run only)', value: 0.1 });
       await loadScript(TESSERACT_URL);
       return window.Tesseract.createWorker(lang, 1, {
-        workerPath: VENDOR + 'worker.min.js',
-        corePath: VENDOR + 'core',
-        langPath: VENDOR + 'lang',
-        workerBlobURL: false,
+        ...VENDOR_OPTS,
         logger: (m) => {
           if (!currentLogger) return;
           if (m.status === 'recognizing text') currentLogger({ stage: 2, label: 'Reading text', value: m.progress || 0 });

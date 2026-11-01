@@ -1,6 +1,7 @@
 // Hero light beam with floating dust (three.js). Mounts on any canvas[data-beam]; the canvas parent is the host.
 import * as THREE from '../vendor/three/three.module.js';
 
+const LITE = () => { const c = navigator.connection; return !!(c && (c.saveData || /2g/.test(c.effectiveType || ''))); };
 const RM = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 const BASE = -2.3, SWING = 0.7, OX = 1.04, OY = 1.18, COUNT = 3400;
 // Brand: navy #17243A ground, blue #356AE6 family for the light
@@ -139,6 +140,7 @@ function mount(cv) {
 }
 
 function scan() {
+  if (LITE()) return;
   document.querySelectorAll('canvas[data-beam]').forEach(mount);
   document.querySelectorAll('canvas[data-beam]').forEach((cv) => {}); // mounted canvases dispose themselves when detached
 }
